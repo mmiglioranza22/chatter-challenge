@@ -9,6 +9,7 @@ import { loginUser, fetchUserData } from '../redux/userActions'
 // import { loginUser, } from '../redux/userSlice';
 // import { setUserData } from '../redux/userSlice';
 import { validateLogin } from '../utils/utils';
+import { useSessionStorage } from '../utils/customHooks';
 
 
 function LoginForm() {
@@ -18,6 +19,7 @@ function LoginForm() {
   };
   const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
+  const [token, setToken] = useSessionStorage('token', '')
 
   const [formData, setFormData] = useState<LoginData>(initialValues);
   const [error, setError] = useState<any | undefined>();
@@ -29,14 +31,10 @@ function LoginForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  
-  
   useEffect(() => {
     const { authToken, userId } = user
     if (authToken && userId) {
-      // eslint-disable-next-line no-console
-      console.log({ authToken, userId })
-      handleFetchUserData(user)
+      setToken(authToken)
     }
   }, [user])
 
@@ -51,7 +49,9 @@ function LoginForm() {
       2. Handle errors (if there is at least one) 
     */
 
-    if (!hasError) {
+      // eslint-disable-next-line no-console
+      // console.log(hasError)
+    if (hasError) {
       // dispatch(loginUser(data))
       dispatch(loginUser(data))
     } else {
