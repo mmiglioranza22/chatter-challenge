@@ -37,9 +37,6 @@ function LoginForm() {
       2. Handle errors (if there is at least one) 
     */
 
-// eslint-disable-next-line no-console
-// console.log(data.keys())
-// valida
 if (formData.email && formData.password) {
   dispatch(loginUser(data))
   // eslint-disable-next-line no-console
