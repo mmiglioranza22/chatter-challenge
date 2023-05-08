@@ -3,20 +3,29 @@ import React, { useState } from 'react';
 import FormData from 'form-data';
 import Link from 'next/link';
 import { LoginData } from '../types/login';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { loginUser } from '../redux/userSlice';
+
 
 function LoginForm() {
   const initialValues: LoginData = {
     email: '',
     password: ''
   };
+  const user = useAppSelector((state) => state.user)
+  const dispatch = useAppDispatch()
 
   const [formData, setFormData] = useState<LoginData>(initialValues);
-  const data = new FormData();
+  const data: FormData = new FormData();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const validateForm = (values:LoginData) => {
+    
+  }
 
   const handleLogin = () => {
     resetForm();
@@ -27,11 +36,23 @@ function LoginForm() {
       1. Check login
       2. Handle errors (if there is at least one) 
     */
+
+// eslint-disable-next-line no-console
+// console.log(data.keys())
+// valida
+if (formData.email && formData.password) {
+  dispatch(loginUser(data))
+  // eslint-disable-next-line no-console
+  console.log({user})
+}
   };
 
   const resetForm = () => {
     // data.delete('email');
     // data.delete('password');
+    // data.append('email', '');
+    // data.append('password', '');
+    // dispatch(loginUser(data))
   };
 
   return (
@@ -45,6 +66,7 @@ function LoginForm() {
         name="email"
         placeholder="Ingresa tu correo electrónico"
         onChange={handleInputChange}
+        value={formData.email}
       />
 
       <Field
@@ -53,6 +75,8 @@ function LoginForm() {
         name="password"
         placeholder="Ingresa tu contraseña"
         onChange={handleInputChange}
+        value={formData.password}
+
       />
 
       <div className="content d-flex flex-column mb-5 d-flex align-items-start" data-aos="fade">

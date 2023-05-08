@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { UserDataState } from '../types/chat';
+import apiClient from '../utils/client';
+import FormData from 'form-data';
 
 const initialState: UserDataState = {
   name: '',
@@ -10,6 +12,13 @@ const initialState: UserDataState = {
   userId: '',
   authToken: ''
 };
+
+export const loginUser = createAsyncThunk("user/loginUser", async (loginData: FormData) => {
+  // eslint-disable-next-line no-console
+  console.log({loginData})
+  const response = await apiClient.post('/login', loginData)
+  return response.data;
+});
 
 export const userSlice = createSlice({
   name: 'user',
@@ -36,6 +45,16 @@ export const userSlice = createSlice({
       state.userId = '';
       state.authToken = '';
     }
+  },
+  extraReducers: builder => {
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.userId = action.payload.userId
+      state.authToken = action.payload.token
+    })
+    builder.addCase(loginUser.rejected, (state, action) => {
+      // eslint-disable-next-line no-console
+      console.log(action.error)
+    })
   }
 });
 

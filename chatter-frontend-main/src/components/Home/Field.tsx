@@ -1,7 +1,7 @@
 import { FieldProps } from '../../types/chat';
 
 function Field(fieldProps: FieldProps) {
-  const { title, placeholder, type, name, onChange } = fieldProps;
+  const { title, placeholder, type, name, onChange, value } = fieldProps;
 
   return (
     <div className="content d-flex flex-column mb-4 position-relative" data-aos="fade">
@@ -14,6 +14,7 @@ function Field(fieldProps: FieldProps) {
           id={name}
           placeholder={placeholder}
           onChange={onChange}
+          value={value}
         />
         <span className="focus-border"></span>
       </div>

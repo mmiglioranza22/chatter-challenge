@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit'
 import { userSlice } from './userSlice'
 import { chatsSlice } from './chatsSlice'
 
