@@ -1,8 +1,9 @@
 import { FieldProps } from '../../types/chat';
 
 function Field(fieldProps: FieldProps) {
-  const { title, placeholder, type, name, onChange, value } = fieldProps;
-
+  const { title, placeholder, type, name, onChange, value, error } = fieldProps;
+  // eslint-disable-next-line no-console
+  // console.log(error, {error})
   return (
     <div className="content d-flex flex-column mb-4 position-relative" data-aos="fade">
       <span>{title}</span>

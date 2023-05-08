@@ -7,7 +7,8 @@ import { UserDataState } from '../types/types'
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loginUser, fetchUserData } from '../redux/userActions'
 // import { loginUser, } from '../redux/userSlice';
-import { setUserData } from '../redux/userSlice';
+// import { setUserData } from '../redux/userSlice';
+import { validateLogin } from '../utils/utils';
 
 
 function LoginForm() {
@@ -19,6 +20,8 @@ function LoginForm() {
   const dispatch = useAppDispatch()
 
   const [formData, setFormData] = useState<LoginData>(initialValues);
+  const [error, setError] = useState<any | undefined>();
+
   const data: FormData = new FormData();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,9 +29,7 @@ function LoginForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const validateForm = (values:LoginData) => {
-    
-  }
+  
   
   useEffect(() => {
     const { authToken, userId } = user
@@ -39,20 +40,22 @@ function LoginForm() {
     }
   }, [user])
 
-
   const handleLogin = () => {
     resetForm();
+    const hasError = validateLogin(formData)
     data.append('email', formData.email);
     data.append('password', formData.password);
     /* 
       TODO: 
-      1. Check login
+      1. Check login 
       2. Handle errors (if there is at least one) 
     */
 
-    if (formData.email && formData.password) {
+    if (!hasError) {
       // dispatch(loginUser(data))
       dispatch(loginUser(data))
+    } else {
+      setError(hasError)
     }
   };
 
@@ -67,6 +70,7 @@ function LoginForm() {
     // data.append('email', '');
     // data.append('password', '');
     // dispatch(loginUser(data))
+    setFormData(initialValues);
   };
 
   return (
@@ -81,6 +85,7 @@ function LoginForm() {
         placeholder="Ingresa tu correo electrónico"
         onChange={handleInputChange}
         value={formData.email}
+        error={error?.password}
       />
 
       <Field
@@ -90,7 +95,7 @@ function LoginForm() {
         placeholder="Ingresa tu contraseña"
         onChange={handleInputChange}
         value={formData.password}
-
+        error={error?.password}
       />
 
       <div className="content d-flex flex-column mb-5 d-flex align-items-start" data-aos="fade">
