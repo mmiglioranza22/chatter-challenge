@@ -1,11 +1,13 @@
 import { configureStore, AnyAction, ThunkAction } from '@reduxjs/toolkit'
 import { userSlice } from './userSlice'
 import { chatsSlice } from './chatsSlice'
+import { errorSlice } from './errorSlice'
 
 export const store = configureStore({
   reducer: {
       user: userSlice.reducer,
       chats: chatsSlice.reducer,
+      error: errorSlice.reducer
   }
 })
 

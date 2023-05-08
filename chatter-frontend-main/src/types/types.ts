@@ -101,3 +101,9 @@ export interface ConfirmDialogProps {
 	handleCancel?: any;
 	isOpen: boolean;
 }
+
+export interface ApiError {
+	errorCode: string | number,
+  errorMessage: string,
+  meta?: Record<any, any>
+}
