@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, /* createAsyncThunk */} from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { UserDataState } from '../types/chat';
-import apiClient from '../utils/client';
-import FormData from 'form-data';
+// import apiClient from '../utils/client';
+// import FormData from 'form-data';
 
 const initialState: UserDataState = {
   name: '',
@@ -13,12 +13,12 @@ const initialState: UserDataState = {
   authToken: ''
 };
 
-export const loginUser = createAsyncThunk("user/loginUser", async (loginData: FormData) => {
-  // eslint-disable-next-line no-console
-  console.log({loginData})
-  const response = await apiClient.post('/login', loginData)
-  return response.data;
-});
+// createAsyncThunk approach
+// export const loginUser = createAsyncThunk("user/loginUser", async (loginData: FormData) => {
+//   const response = await apiClient.post('/login', loginData)
+//   return response.data;
+// });
+
 
 export const userSlice = createSlice({
   name: 'user',
@@ -32,6 +32,9 @@ export const userSlice = createSlice({
       state.authToken = action.payload.authToken;
     },
     setUserData: (state, action: PayloadAction<UserDataState>) => {
+            // eslint-disable-next-line no-console
+            console.log({action})
+
       state.name = action.payload.name;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
@@ -46,16 +49,17 @@ export const userSlice = createSlice({
       state.authToken = '';
     }
   },
-  extraReducers: builder => {
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.userId = action.payload.userId
-      state.authToken = action.payload.token
-    })
-    builder.addCase(loginUser.rejected, (state, action) => {
-      // eslint-disable-next-line no-console
-      console.log(action.error)
-    })
-  }
+  // createAsyncThunk approach
+  // extraReducers: builder => {
+  //   builder.addCase(loginUser.fulfilled, (state, action) => {
+  //     state.userId = action.payload.userId
+  //     state.authToken = action.payload.token
+  //   })
+  //   builder.addCase(loginUser.rejected, (state, action) => {
+  //     // eslint-disable-next-line no-console
+  //     console.log(action.error)
+  //   })
+  // }
 });
 
 export const { setUserName, setLoginData, setUserData, setLogoutData } = userSlice.actions;

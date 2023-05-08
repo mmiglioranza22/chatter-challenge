@@ -1,10 +1,13 @@
 import Field from '../components/Home/Field';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormData from 'form-data';
 import Link from 'next/link';
 import { LoginData } from '../types/login';
+import { UserDataState } from '../types/types'
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { loginUser } from '../redux/userSlice';
+import { loginUser, fetchUserData } from '../redux/userActions'
+// import { loginUser, } from '../redux/userSlice';
+import { setUserData } from '../redux/userSlice';
 
 
 function LoginForm() {
@@ -26,6 +29,16 @@ function LoginForm() {
   const validateForm = (values:LoginData) => {
     
   }
+  
+  useEffect(() => {
+    const { authToken, userId } = user
+    if (authToken && userId) {
+      // eslint-disable-next-line no-console
+      console.log({ authToken, userId })
+      handleFetchUserData(user)
+    }
+  }, [user])
+
 
   const handleLogin = () => {
     resetForm();
@@ -37,12 +50,16 @@ function LoginForm() {
       2. Handle errors (if there is at least one) 
     */
 
-if (formData.email && formData.password) {
-  dispatch(loginUser(data))
-  // eslint-disable-next-line no-console
-  console.log({user})
-}
+    if (formData.email && formData.password) {
+      // dispatch(loginUser(data))
+      dispatch(loginUser(data))
+    }
   };
+
+  const handleFetchUserData = (userId: UserDataState) => {
+      dispatch(fetchUserData(userId))
+  }
+
 
   const resetForm = () => {
     // data.delete('email');
