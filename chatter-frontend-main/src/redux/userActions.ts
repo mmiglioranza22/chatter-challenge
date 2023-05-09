@@ -57,3 +57,23 @@ export const fetchUserData = (user: UserDataState): AppThunk => {
     }
   }
 }
+
+export const deleteUser = (user: UserDataState): AppThunk => {
+  return async(dispatch) => {
+    try {
+      const { authToken, userId } = user
+      const config: AxiosRequestConfig = {
+        data: { user: userId },
+        headers: { Authorization: `Bearer ${authToken}` }
+      }
+      const response = await apiClient.delete('/users', config)
+      if (response.data.message) {
+        dispatch(actions.setLogoutData())
+        return NotificationSuccess(response.data.message)
+      }
+    } catch (err: any | unknown) {
+      const message = `${err.response.data.message}.\n${err.response.status} ${err.response.statusText}.`
+      return NotificationFailure(JSON.stringify(message))
+    }
+  }
+}

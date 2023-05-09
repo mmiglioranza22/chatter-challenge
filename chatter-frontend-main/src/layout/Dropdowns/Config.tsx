@@ -1,14 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import NewChatModal from '../../components/HomeChat/NewChatModal';
 import { DropDownProps } from '../../types/chat';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { deleteUser } from '../../redux/userActions'
+import { useRouter } from 'next/dist/client/router';
+import { LoadStart, LoadRemove } from '../../components/Loading';
 
 function ConfigDropdown(dropDownProps: DropDownProps) {
   const { getChatsData, userData, isOpen } = dropDownProps;
-
+  
+  const router = useRouter()
+  const user = useAppSelector((state) => state.user)
+  const [prevUser] = useState(user)
+  const dispatch = useAppDispatch()
   const [delDialogIsOpen, setDelDialogIsOpen] = useState(false);
   const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
 
+
+  useEffect(() => {
+    // setCurrentUser(user)
+    // eslint-disable-next-line no-console
+    console.log({user, prevUser})
+  }, [])
+  
   const handleDeleteUser = () => {
     setDelDialogIsOpen(true);
   };
@@ -20,10 +35,23 @@ function ConfigDropdown(dropDownProps: DropDownProps) {
   const handleConfirmDelete = () => {
     /* 
       TODO: 
-      1. Get current user data 
-      2. Delete user 
+      1. Get current user data - DONE
+      2. Delete user - DONE
     */
+   // eslint-disable-next-line no-console
+   console.log('confirmdelete')
+    dispatch(deleteUser(user))    
   };
+
+  useEffect(() => {
+    if(prevUser && prevUser.userId && prevUser.userId !== user.userId) {
+      LoadStart()
+      router.push('/')
+      LoadRemove()
+    } 
+  }, [user])
+
+
 
   return (
     <div className={isOpen ? 'configDropdown scale1' : 'configDropdown'}>
