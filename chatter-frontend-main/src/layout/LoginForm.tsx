@@ -42,7 +42,7 @@ function LoginForm() {
     const { authToken, userId } = user
     if (authToken && userId) {
       setToken(authToken)
-      dispatch(fetchUserData(user))
+      handleFetchUserData(user)
       LoadStart()
       LoadRemove(2000)
       router.push('/chat')
@@ -52,14 +52,13 @@ function LoginForm() {
   const handleLogin = () => {
     resetForm();
     const hasError = validateLogin(formData)
-    data.append('email', formData.email);
+    data.append('email', formData.email.trim());
     data.append('password', formData.password);
     /* 
       TODO: 
-      1. Check login 
-      2. Handle errors (if there is at least one) 
+      1. Check login  - DONE
+      2. Handle errors (if there is at least one) - DONE
     */
-  //  error flow pending
     if (!Object.keys(hasError).length) {
       // dispatch(loginUser(data))
       dispatch(loginUser(data))
@@ -68,9 +67,9 @@ function LoginForm() {
     }
   };
 
-  // const handleFetchUserData = (userId: UserDataState) => {
-  //     dispatch(fetchUserData(userId))
-  // }
+  const handleFetchUserData = (user: UserDataState) => {
+    dispatch(fetchUserData(user))
+  }
 
 
   const resetForm = () => {
@@ -94,7 +93,7 @@ function LoginForm() {
         placeholder="Ingresa tu correo electrónico"
         onChange={handleInputChange}
         value={formData.email}
-        error={error?.password}
+        error={error}
       />
 
       <Field
@@ -104,7 +103,7 @@ function LoginForm() {
         placeholder="Ingresa tu contraseña"
         onChange={handleInputChange}
         value={formData.password}
-        error={error?.password}
+        error={error}
       />
 
       <div className="content d-flex flex-column mb-5 d-flex align-items-start" data-aos="fade">

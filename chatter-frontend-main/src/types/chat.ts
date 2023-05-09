@@ -33,7 +33,7 @@ export interface FieldProps {
   name: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   value: string,
-  error: Record<any, string>
+  error?: Record<any, string> | undefined
 }
 
 export interface DropDownProps {

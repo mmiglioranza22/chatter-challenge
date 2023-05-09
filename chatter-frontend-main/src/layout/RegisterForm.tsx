@@ -1,10 +1,12 @@
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import FormData from 'form-data';
 import { RegisterData } from '../types/register';
 import Field from '../components/Home/Field';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createUser } from '../redux/userActions'
+import { useRouter } from 'next/dist/client/router';
+import { validateRegister } from '../utils/utils';
 
 function Register() {
   const initialValues: RegisterData = {
@@ -13,7 +15,8 @@ function Register() {
     email: '',
     password: ''
   };
-
+  const router = useRouter()
+  const [error, setError] = useState<any | undefined>();
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [formData, setFormData] = useState<RegisterData>(initialValues);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
@@ -40,19 +43,29 @@ function Register() {
   };
 
   const handleRegister = () => {
+    const hasError = validateRegister(formData)
     data.append('image', selectedImage);
     data.append('name', formData.name);
     data.append('lastName', formData.lastName);
-    data.append('email', formData.email);
+    data.append('email', formData.email.trim()); // API checks exact match
     data.append('password', formData.password);
     /* 
       TODO: 
-      1. Make a new user
-      2. Display a success notification (or error).
+      1. Make a new user - DONE
+      2. Display a success notification (or error). - DONE
     */
-    dispatch(createUser(data))
-    // error flow pending
+    if (!Object.keys(hasError).length) {
+      dispatch(createUser(data, formData.name))
+    } else {
+      setError(hasError)
+    }
   };
+
+  useEffect(() => {
+    if(user && user.name && user.name === formData.name) {
+      router.push('/')
+    } 
+  }, [user])
 
   return (
     <div
@@ -65,6 +78,8 @@ function Register() {
         name="name"
         placeholder="Ingresa tu nombre"
         onChange={handleInputChange}
+        value={formData.name}
+        error={error}
       />
 
       <Field
@@ -73,6 +88,8 @@ function Register() {
         name="lastName"
         placeholder="Ingresa tu apellido"
         onChange={handleInputChange}
+        value={formData.lastName}
+        error={error}
       />
 
       <Field
@@ -81,6 +98,8 @@ function Register() {
         name="email"
         placeholder="Ingresa tu correo electrónico"
         onChange={handleInputChange}
+        value={formData.email}
+        error={error}
       />
 
       <div className="content d-flex flex-column mb-4" data-aos="fade">
@@ -104,6 +123,8 @@ function Register() {
         name="password"
         placeholder="Ingresa tu contraseña"
         onChange={handleInputChange}
+        value={formData.password}
+        error={error}
       />
 
       <div className="content d-flex flex-column mb-3 d-flex align-items-start" data-aos="fade">
