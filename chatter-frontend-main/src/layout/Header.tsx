@@ -5,7 +5,6 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser, setLogoutData } from '../redux/userSlice';
 import { LogoType } from '../types/chat';
-import { useSessionStorage } from '../utils/customHooks';
 import { LoadStart, LoadRemove } from '../components/Loading';
 
 function Header() {
@@ -13,11 +12,9 @@ function Header() {
 
   const userData = useAppSelector(getUser);
   const dispatch = useAppDispatch();
-  const [token, setToken] = useSessionStorage('token', '');
 
   const signOff = () => {
     LoadStart()
-    setToken(token)
     dispatch(setLogoutData());
     LoadRemove()
   };
