@@ -10,6 +10,8 @@ import { loginUser, fetchUserData } from '../redux/userActions'
 // import { setUserData } from '../redux/userSlice';
 import { validateLogin } from '../utils/utils';
 import { useSessionStorage } from '../utils/customHooks';
+import { useRouter } from 'next/dist/client/router';
+import { LoadStart, LoadRemove } from '../components/Loading';
 
 
 function LoginForm() {
@@ -17,6 +19,7 @@ function LoginForm() {
     email: '',
     password: ''
   };
+  const router = useRouter()
   const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
   const [token, setToken] = useSessionStorage('token', '')
@@ -32,11 +35,19 @@ function LoginForm() {
   };
 
   useEffect(() => {
+    setToken('') 
+  }, [])
+  
+  useEffect(() => {
     const { authToken, userId } = user
     if (authToken && userId) {
       setToken(authToken)
+      dispatch(fetchUserData(user))
+      LoadStart()
+      LoadRemove(2000)
+      router.push('/chat')
     }
-  }, [user])
+  }, [user.userId, user.authToken])
 
   const handleLogin = () => {
     resetForm();
@@ -48,10 +59,7 @@ function LoginForm() {
       1. Check login 
       2. Handle errors (if there is at least one) 
     */
-
-      // eslint-disable-next-line no-console
-      // console.log(hasError)
-    if (hasError) {
+    if (!Object.keys(hasError).length) {
       // dispatch(loginUser(data))
       dispatch(loginUser(data))
     } else {
@@ -59,9 +67,9 @@ function LoginForm() {
     }
   };
 
-  const handleFetchUserData = (userId: UserDataState) => {
-      dispatch(fetchUserData(userId))
-  }
+  // const handleFetchUserData = (userId: UserDataState) => {
+  //     dispatch(fetchUserData(userId))
+  // }
 
 
   const resetForm = () => {
@@ -110,6 +118,8 @@ function LoginForm() {
           Registrate aquí
         </Link>
       </div>
+
+      <div></div>
     </div>
   );
 }
