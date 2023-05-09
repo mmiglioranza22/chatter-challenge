@@ -32,9 +32,6 @@ export const userSlice = createSlice({
       state.authToken = action.payload.authToken;
     },
     setUserData: (state, action: PayloadAction<UserDataState>) => {
-            // eslint-disable-next-line no-console
-            console.log({action})
-
       state.name = action.payload.name;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
