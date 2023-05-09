@@ -20,7 +20,7 @@ export const loginUser = (data: FormData): AppThunk => {
       dispatch(actions.setLoginData(userData))
       return NotificationSuccess('Login exitoso!')
     } catch (err: any | unknown) {
-      const message = `${err.response.data.message}.\n${err.response.status} ${err.response.statusText}.`
+      const message = `${err.response.data.message}.\n(${err.response.status} ${err.response.statusText}).`
       return NotificationFailure(message)
     }
   }
@@ -35,7 +35,7 @@ export const createUser = (data: FormData, username: string): AppThunk => {
         return NotificationSuccess(response.data.message)
       }
     } catch (err: any | unknown) {
-      const message = `${err.response.data.message}.\n${err.response.status} ${err.response.statusText}.`
+      const message = `${err.response.data.message}.\n(${err.response.status} ${err.response.statusText}).`
       return NotificationFailure(message)
     }
   }
@@ -52,7 +52,7 @@ export const fetchUserData = (user: UserDataState): AppThunk => {
       const response = await apiClient.get('/users', config)
       dispatch(actions.setUserData(response.data))
     } catch (err: any | unknown) {
-      const message = `${err.response.data.message}.\n${err.response.status} ${err.response.statusText}.`
+      const message = `${err.response.data.message}.\n(${err.response.status} ${err.response.statusText}).`
       return NotificationFailure(message)
     }
   }
@@ -72,7 +72,7 @@ export const deleteUser = (user: UserDataState): AppThunk => {
         return NotificationSuccess(response.data.message)
       }
     } catch (err: any | unknown) {
-      const message = `${err.response.data.message}.\n${err.response.status} ${err.response.statusText}.`
+      const message = `${err.response.data.message}.\n(${err.response.status} ${err.response.statusText}).`
       return NotificationFailure(message)
     }
   }
