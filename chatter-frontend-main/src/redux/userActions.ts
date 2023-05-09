@@ -53,7 +53,7 @@ export const fetchUserData = (user: UserDataState): AppThunk => {
       dispatch(actions.setUserData(response.data))
     } catch (err: any | unknown) {
       const message = `${err.response.data.message}.\n${err.response.status} ${err.response.statusText}.`
-      return NotificationFailure(JSON.stringify(message))
+      return NotificationFailure(message)
     }
   }
 }
@@ -73,7 +73,7 @@ export const deleteUser = (user: UserDataState): AppThunk => {
       }
     } catch (err: any | unknown) {
       const message = `${err.response.data.message}.\n${err.response.status} ${err.response.statusText}.`
-      return NotificationFailure(JSON.stringify(message))
+      return NotificationFailure(message)
     }
   }
 }
