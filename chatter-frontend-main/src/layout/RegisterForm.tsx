@@ -48,9 +48,10 @@ function Register() {
     /* 
       TODO: 
       1. Make a new user
-      2. Display a sucess notification (or error).
+      2. Display a success notification (or error).
     */
     dispatch(createUser(data))
+    // error flow pending
   };
 
   return (

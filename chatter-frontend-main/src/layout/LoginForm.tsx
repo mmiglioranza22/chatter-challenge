@@ -59,6 +59,7 @@ function LoginForm() {
       1. Check login 
       2. Handle errors (if there is at least one) 
     */
+  //  error flow pending
     if (!Object.keys(hasError).length) {
       // dispatch(loginUser(data))
       dispatch(loginUser(data))

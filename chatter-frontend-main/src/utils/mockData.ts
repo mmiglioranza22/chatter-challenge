@@ -3,7 +3,7 @@ import { TicketPriority, TicketStatus, TicketData } from '../types/chat';
 /**
  * TODO
  *
- * Use this ticket mock data to display both tickets (one closed and one opened) in the conext menu of each chat
+ * Use this ticket mock data to display both tickets (one closed and one opened) in the context menu of each chat
  */
 export const MockTicketData: TicketData[] = [
   {
