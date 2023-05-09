@@ -34,6 +34,7 @@ function LoginForm() {
     setFormData({ ...formData, [name]: value });
   };
 
+  // token is cleaned upon mounting, so all redirects to '/' clear session token.
   useEffect(() => {
     setToken('') 
   }, [])
