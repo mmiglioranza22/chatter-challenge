@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import FormData from 'form-data';
-
 import { RegisterData } from '../types/register';
 import Field from '../components/Home/Field';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { createUser } from '../redux/userActions'
 
 function Register() {
   const initialValues: RegisterData = {
@@ -16,6 +17,8 @@ function Register() {
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [formData, setFormData] = useState<RegisterData>(initialValues);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
+  const user = useAppSelector((state) => state.user)
+  const dispatch = useAppDispatch()
 
   const data = new FormData();
 
@@ -47,6 +50,7 @@ function Register() {
       1. Make a new user
       2. Display a sucess notification (or error).
     */
+    dispatch(createUser(data))
   };
 
   return (

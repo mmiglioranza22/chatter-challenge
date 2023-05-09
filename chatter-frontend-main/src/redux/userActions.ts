@@ -7,14 +7,26 @@ import { AxiosRequestConfig } from 'axios';
 
 export const { actions } = userSlice
 
-export const loginUser = (loginData: FormData): AppThunk => {
+export const loginUser = (data: FormData): AppThunk => {
   return async(dispatch) => {
-    const response = await apiClient.post('/login', loginData)
+    const response = await apiClient.post('/login', data)
+    const { userId, token } = response.data
     const userData = {
-      userId: response.data.userId,
-      authToken: response.data.token
+      userId,
+      authToken: token
     }
     dispatch(actions.setLoginData(userData))
+  }
+}
+
+export const createUser = (data: FormData): AppThunk => {
+  return async() => {
+    const response = await apiClient.post('/signup', data)
+    if (response.data.message) {
+      alert(response.data.message)
+      return true
+    }
+    return false
   }
 }
 
