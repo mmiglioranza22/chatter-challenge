@@ -5,15 +5,21 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser, setLogoutData } from '../redux/userSlice';
 import { LogoType } from '../types/chat';
+import { useSessionStorage } from '../utils/customHooks';
+import { LoadStart, LoadRemove } from '../components/Loading';
 
 function Header() {
   const image = logo as unknown as LogoType;
 
   const userData = useAppSelector(getUser);
   const dispatch = useAppDispatch();
+  const [token, setToken] = useSessionStorage('token', '');
 
   const signOff = () => {
+    LoadStart()
+    setToken(token)
     dispatch(setLogoutData());
+    LoadRemove()
   };
 
   return (
@@ -26,7 +32,7 @@ function Header() {
         <Navbar.Collapse className="justify-content-end">
           {userData.authToken ? (
             <Nav className="d-flex gap-3">
-              <Link href="/" className="nav-item" onClick={signOff}>
+              <Link href="/" className="nav-item" onClick={signOff} legacyBehavior={false}>
                 Abandonar Sesión
               </Link>
             </Nav>
