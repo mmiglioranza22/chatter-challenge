@@ -23,6 +23,7 @@ function MyApp(appProps: AppProps) {
 
   return (
     <>
+    {/* proteger rutas */}
       <Provider store={store}>
         <Head>
           <title>Chatter</title>
