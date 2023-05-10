@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { LoginData } from '../types/login';
 import { UserDataState } from '../types/types'
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { loginUser, fetchUserData } from '../redux/userActions'
-// import { loginUser, } from '../redux/userSlice';
+import { fetchUserData } from '../redux/userActions'
+import { loginUser  } from '../redux/userSlice';
 // import { setUserData } from '../redux/userSlice';
 import { validateLogin } from '../utils/utils';
 import { useSessionStorage } from '../utils/customHooks';
 import { useRouter } from 'next/dist/client/router';
 import { LoadStart, LoadRemove } from '../components/Loading';
+import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
 
 
 function LoginForm() {
@@ -34,8 +35,9 @@ function LoginForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  // token is cleaned upon mounting, so all redirects to '/' clear session token.
   useEffect(() => {
+    // token is cleaned upon mounting, so all redirects to '/' clear session token.
+    // ? CHECK: remove this for persisting token in dev builds refreshes upon saving?
     setToken('')
     LoadRemove() 
   }, [])
@@ -50,10 +52,10 @@ function LoginForm() {
     }
   }, [user.userId, user.authToken])
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     resetForm();
     const hasError = validateLogin(formData)
-    data.append('email', formData.email.trim());
+    data.append('email', formData.email.trim()); // API does exact check
     data.append('password', formData.password);
     /* 
       TODO: 
@@ -61,8 +63,20 @@ function LoginForm() {
       2. Handle errors (if there is at least one) - DONE
     */
     if (!Object.keys(hasError).length) {
-      // dispatch(loginUser(data))
-      dispatch(loginUser(data))
+      const resultAction:any = await dispatch(loginUser(data))
+      if (loginUser.fulfilled.match(resultAction)) {
+        NotificationSuccess('Logged in!')
+      } else {
+        if (resultAction.payload) {
+          console.log(resultAction)
+          const message = `${resultAction.payload.message}.
+          (${resultAction.payload.status} ${resultAction.payload.statusText}).`
+          NotificationFailure(message)
+        } else {
+          // case for API errors without messages and other
+          NotificationFailure(`${resultAction.error.message}`)
+        }
+      }
     } else {
       setError(hasError)
     }
@@ -72,13 +86,7 @@ function LoginForm() {
     dispatch(fetchUserData(user))
   }
 
-
   const resetForm = () => {
-    // data.delete('email');
-    // data.delete('password');
-    // data.append('email', '');
-    // data.append('password', '');
-    // dispatch(loginUser(data))
     setFormData(initialValues);
   };
 
