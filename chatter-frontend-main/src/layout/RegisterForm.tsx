@@ -8,6 +8,7 @@ import { createUser } from '../redux/userSlice'
 import { useRouter } from 'next/dist/client/router';
 import { validateRegister } from '../utils/utils';
 import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
+import { LoadRemove, LoadStart } from '../components/Loading';
 
 function Register() {
   const initialValues: RegisterData = {
@@ -60,10 +61,12 @@ function Register() {
       2. Display a success notification (or error). - DONE
     */
     if (!Object.keys(hasError).length) {
+      LoadStart()
       const resultAction: any = await dispatch(createUser(data))
       if (createUser.fulfilled.match(resultAction)) {
         router.push('/')
         NotificationSuccess(resultAction.payload.message || 'User created successfully!')
+        LoadRemove()
       } else {
         if (resultAction.payload) {
           const message = `${resultAction.payload.message}.
@@ -73,6 +76,7 @@ function Register() {
           // case for API errors without messages and other
           NotificationFailure(`${resultAction.error.message}`)
         }
+        LoadRemove()
       }
     } else {
       setError(hasError)

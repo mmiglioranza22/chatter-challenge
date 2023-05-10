@@ -37,7 +37,10 @@ function LoginForm() {
     // token is cleaned upon mounting, so all redirects to '/' clear session token.
     // ? CHECK: remove this for persisting token in dev builds refreshes upon saving?
     setToken('')
-    LoadRemove() 
+    // LoadRemove() 
+    return () => {
+      LoadRemove()
+    }
   }, [])
 
   useEffect(() => {
@@ -50,7 +53,6 @@ function LoginForm() {
     if (authToken && userId) {
       setToken(authToken)
       handleFetchUserData(user)
-      LoadStart()
       router.push('/chat')
     }
   }, [user.userId, user.authToken])
@@ -66,6 +68,7 @@ function LoginForm() {
       2. Handle errors (if there is at least one) - DONE
     */
     if (!Object.keys(hasError).length) {
+      LoadStart()
       const resultAction: any = await dispatch(loginUser(data))
       if (loginUser.fulfilled.match(resultAction)) {
         NotificationSuccess('Logged in!')
@@ -78,6 +81,7 @@ function LoginForm() {
           // case for API errors without messages and other
           NotificationFailure(`${resultAction.error.message}`)
         }
+        LoadRemove()
       }
     } else {
       setError(hasError)

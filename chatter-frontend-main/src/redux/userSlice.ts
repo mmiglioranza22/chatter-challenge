@@ -55,6 +55,21 @@ export const createUser = createAsyncThunk('user/createUser', async (data: FormD
   }
 });
 
+export const deleteUser = createAsyncThunk('user/deleteUser', async (user: UserDataState, thunkAPI) => {
+  try {
+    const { authToken, userId } = user
+      const config: AxiosRequestConfig = {
+        data: { user: userId },
+        headers: { Authorization: `Bearer ${authToken}` }
+      }
+    const response = await apiClient.delete('/users', config)
+    return response.data
+  } catch (error: any | unknown) {
+    const errorResponse: APIResponse = generateApiErrorResponse(error)
+    return thunkAPI.rejectWithValue(errorResponse) 
+  }
+});
+
 const isRejectedAction = isRejected(loginUser, fetchUserData, createUser)
 const isFulfilledAction = isFulfilled(loginUser, fetchUserData, createUser)
 
@@ -104,6 +119,11 @@ export const userSlice = createSlice({
     builder.addCase(createUser.fulfilled, (state, action) => {
      state.message = action.payload
     })
+    // Delete user
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state = initialState
+      state.message = action.payload
+     })   
     // Error handler for all actions
     builder.addMatcher(
       (action)  => isRejectedAction(action),
