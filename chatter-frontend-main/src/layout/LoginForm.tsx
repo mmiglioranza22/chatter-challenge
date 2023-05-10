@@ -5,9 +5,7 @@ import Link from 'next/link';
 import { LoginData } from '../types/login';
 import { UserDataState } from '../types/types'
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchUserData } from '../redux/userActions'
-import { loginUser  } from '../redux/userSlice';
-// import { setUserData } from '../redux/userSlice';
+import { loginUser, fetchUserData  } from '../redux/userSlice';
 import { validateLogin } from '../utils/utils';
 import { useSessionStorage } from '../utils/customHooks';
 import { useRouter } from 'next/dist/client/router';

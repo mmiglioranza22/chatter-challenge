@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk, isRejected } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { UserDataState, APIError, FormDataType } from '../types/chat';
 import apiClient from '../utils/client';
+import { AxiosRequestConfig } from 'axios';
 
 const initialState: UserDataState = {
   name: '',
@@ -15,12 +16,12 @@ const initialState: UserDataState = {
 const errorState: APIError = {
   message: '',
 }
-// THUNKS
+
+// THUNKS ACTION CREATORS
 
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData: FormDataType, thunkAPI) => {
-  let response
   try {
-    response = await apiClient.post('/login', loginData)
+    const response = await apiClient.post('/login', loginData)
     return response.data;
   } catch (error: any | unknown) {
     const { response } = error
@@ -33,6 +34,27 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData: Fo
   }
 });
 
+export const fetchUserData = createAsyncThunk('user/fetchUserData', async (user: UserDataState, thunkAPI) => {
+  try {
+    const { authToken, userId } = user
+      const config: AxiosRequestConfig = {
+        data: { user: userId },
+        headers: { Authorization: `Bearer ${authToken}` }
+      }
+    const response = await apiClient.get('/users', config)
+    return response.data;
+  } catch (error: any | unknown) {
+    const { response } = error
+    const errorResponse: APIError = {
+      message: response.data.message,
+      status: response.status,
+      statusText: response.statusText
+    }
+    return thunkAPI.rejectWithValue(errorResponse) 
+  }
+});
+
+const isARejectedAction = isRejected(loginUser, fetchUserData)
 
 export const userSlice = createSlice({
   name: 'user',
@@ -64,15 +86,26 @@ export const userSlice = createSlice({
     }
   },
   extraReducers: builder => {
+    // Login
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.userId = action.payload.userId
       state.authToken = action.payload.token
       state.error = {}
     })
-    builder.addCase(loginUser.rejected, (state, action) => {
-      state.error = action.payload
+    // User data
+    builder.addCase(fetchUserData.fulfilled, (state, action) => {
+      state.name = action.payload.name;
+      state.lastName = action.payload.lastName;
+      state.email = action.payload.email;
+      state.photo = action.payload.photo;
     })
-  }
+    // Error handler for all actions
+    builder.addMatcher(
+      (action)  => isARejectedAction(action),
+      (state, action) => {
+        state.error = action.payload || action.error;
+      })
+    }
 });
 
 export const { setUserName, setLoginData, setUserData, setLogoutData } = userSlice.actions;
