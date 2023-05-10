@@ -4,7 +4,7 @@ import { ChatsState, ChatTabProps } from '../types/chat';
 
 const initialState: ChatsState = {
   chats: [],
-  isAllowedExpand: true
+  isAllowedExpand: true // cuando tiene sentido que sea false ?
 };
 
 export const chatsSlice = createSlice({
