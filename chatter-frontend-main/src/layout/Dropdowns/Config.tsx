@@ -2,17 +2,14 @@ import { useState, useEffect } from 'react';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import NewChatModal from '../../components/HomeChat/NewChatModal';
 import { DropDownProps } from '../../types/chat';
-import { useAppDispatch } from '../../redux/hooks';
-import { deleteUser } from '../../redux/userActions'
 import { useRouter } from 'next/dist/client/router';
 import { LoadStart } from '../../components/Loading';
 
 function ConfigDropdown(dropDownProps: DropDownProps) {
-  const { getChatsData, userData, isOpen } = dropDownProps;
+  const { getChatsData, userData, isOpen, createNewChat, deleteUser } = dropDownProps;
   
   const router = useRouter()
   const [prevUser] = useState(userData)
-  const dispatch = useAppDispatch()
   const [delDialogIsOpen, setDelDialogIsOpen] = useState(false);
   const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
   
@@ -30,7 +27,7 @@ function ConfigDropdown(dropDownProps: DropDownProps) {
       1. Get current user data - DONE in HomeChat component
       2. Delete user - DONE
     */
-    dispatch(deleteUser(userData))
+    deleteUser()
     LoadStart()    
   };
 
@@ -56,6 +53,7 @@ function ConfigDropdown(dropDownProps: DropDownProps) {
         setIsOpen={setNewChatModalIsOpen}
         userData={userData}
         getChatsData={getChatsData}
+        createNewChat={createNewChat}
       />
       <ConfirmDialog
         title="Eliminar Usuario"

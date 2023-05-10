@@ -5,7 +5,7 @@ import FormData from 'form-data';
 import { ChatModalProps } from '../../types/chat';
 
 function NewChatModal(chatModalProps: ChatModalProps) {
-  const { isOpen, setIsOpen } = chatModalProps;
+  const { isOpen, setIsOpen, getChatsData, userData  } = chatModalProps;
 
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [newChatName, setNewChatName] = useState<any | null>();
@@ -17,8 +17,8 @@ function NewChatModal(chatModalProps: ChatModalProps) {
     data.append('image', selectedImage);
     /*
         TODO:
-        1. Create new chat and
-        2. Update chats queue with getChatsData to display it
+        1. Create new chat and ---> createNewChat, userData
+        2. Update chats queue with getChatsData to display it ---> getChatsData
         3. Close popup with handleClose
     */
   };

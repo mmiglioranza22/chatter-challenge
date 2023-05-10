@@ -40,6 +40,8 @@ export interface DropDownProps {
   getChatsData: any;
   userData: UserDataState;
   isOpen: Boolean;
+  deleteUser: Function;
+  createNewChat: Function;
 }
 
 export interface ChatsMessagesProps {
@@ -82,6 +84,7 @@ export interface ChatModalProps {
   setIsOpen: Function;
   userData: UserDataState;
   getChatsData: any;
+  createNewChat: Function;
 }
 
 export interface ConfirmDialogProps {

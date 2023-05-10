@@ -15,6 +15,10 @@ import ConfigDropdown from '../layout/Dropdowns/Config';
 import SearchBar from '../components/SearchBar';
 import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
+import { LoadRemove } from '../components/Loading';
+import { fetchUserChats } from '../redux/chatActions';
+import { deleteUser } from '../redux/userActions'
+
 
 function HomeChat() {
   const chatHeaderInitialState: Chat = {
@@ -46,22 +50,27 @@ function HomeChat() {
       1. Get user data 
       2. Get chats data
     */
+   // eslint-disable-next-line no-console
+   console.log({chats, userData})
+   getChatsData()
+   LoadRemove()
   }, []);
 
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = ref.current.scrollHeight;
-      setConfigOpen((isOpen) => isOpen && chats.isAllowedExpand);
+      setConfigOpen((isOpen) => isOpen && chats.isAllowedExpand);  // que hace esto? 
 
       // Update scroll position
       positionRef.current.scrollIntoView();
 
       /*
         TODO: 
-          1. Listen the socket
+          1. Listen the socket - later
           2. Get chat data
-          3. Set the socket off and return void to prevent useless renders
+          3. Set the socket off and return void to prevent useless renders - later
       */
+
     }
   }, [chats]);
 
@@ -93,15 +102,22 @@ function HomeChat() {
 
   const handleOpenConfig = (e: React.MouseEvent<HTMLDivElement>) => {
     setConfigOpen(!configOpen);
-    dispatch(setIsAllowedExpand(true));
+    dispatch(setIsAllowedExpand(true)); // que hace esto?
     e.stopPropagation();
   };
 
   const getChatsData = () => {
     /* TODO: 
-      Get all chats data 
+      Get all chats data - DONE
     */
+    dispatch(fetchUserChats(userData))
   };
+
+  const deleteUserAction = () => {
+    dispatch(deleteUser(userData))
+  }
+// WIP
+  const createNewChat = () => {}
 
   return (
     <div className="main-wrapper-chat d-flex row flex-grow-1 w-85" data-aos="zoom-in">
@@ -120,7 +136,13 @@ function HomeChat() {
             >
               <IoMdSettings aria-label="Boton de Configuracion" />
             </span>
-            <ConfigDropdown isOpen={configOpen} userData={userData} getChatsData={getChatsData} />
+            <ConfigDropdown
+              isOpen={configOpen}
+              userData={userData}
+              getChatsData={getChatsData}
+              createNewChat={createNewChat}
+              deleteUser={deleteUserAction}
+            />
           </div>
         </div>
 
