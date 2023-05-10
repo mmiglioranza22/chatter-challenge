@@ -27,7 +27,7 @@ function Register() {
   const data = new FormData();
   useEffect(() => {
   // eslint-disable-next-line no-console
-  console.log('register', user)
+  // console.log('register', user)
   })
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

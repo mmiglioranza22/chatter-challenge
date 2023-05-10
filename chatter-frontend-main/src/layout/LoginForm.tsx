@@ -42,7 +42,7 @@ function LoginForm() {
 
   useEffect(() => {
   // eslint-disable-next-line no-console
-  console.log('login', user)
+  // console.log('login', user)
   })
   
   useEffect(() => {
