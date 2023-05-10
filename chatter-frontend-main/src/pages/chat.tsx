@@ -10,14 +10,14 @@ import MyProfile from '../components/MyProfile';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser } from '../redux/userSlice';
 import { Chat, LogoType, FormDataType } from '../types/chat';
-import { getChats, setIsAllowedExpand } from '../redux/chatsSlice';
+import { getChats, setIsAllowedExpand, fetchUserChats } from '../redux/chatsSlice';
 import ChatHeader from '../components/HomeChat/ChatHeader';
 import ConfigDropdown from '../layout/Dropdowns/Config';
 import SearchBar from '../components/SearchBar';
 import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
 import { LoadRemove, LoadStart } from '../components/Loading';
-import { fetchUserChats, createChat } from '../redux/chatActions';
+import { createChat } from '../redux/chatActions';
 import { deleteUser, setLogoutData } from '../redux/userSlice'
 import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
 
@@ -66,7 +66,7 @@ function HomeChat() {
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = ref.current.scrollHeight;
-      setConfigOpen((isOpen) => isOpen && chats.isAllowedExpand);  // que hace esto? 
+      setConfigOpen((isOpen) => isOpen && chats.isAllowedExpand); 
 
       // Update scroll position
       positionRef.current.scrollIntoView();
@@ -109,7 +109,7 @@ function HomeChat() {
 
   const handleOpenConfig = (e: React.MouseEvent<HTMLDivElement>) => {
     setConfigOpen(!configOpen);
-    dispatch(setIsAllowedExpand(true)); // que hace esto?
+    dispatch(setIsAllowedExpand(true));
     e.stopPropagation();
   };
 
@@ -119,7 +119,7 @@ function HomeChat() {
     */
    // eslint-disable-next-line no-console
    console.log('getChatsData')
-    // dispatch(fetchUserChats(userData))
+    dispatch(fetchUserChats(userData))
   };
 
   const handleDeleteUser = async () => {

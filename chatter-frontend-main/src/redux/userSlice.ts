@@ -14,7 +14,7 @@ const initialState: UserDataState = {
   authToken: ''
 };
 
-const apiResponse: APIResponse = {
+const apiResponseState: APIResponse = {
   message: '',
 }
 
@@ -77,7 +77,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: {
     ...initialState,
-    ...apiResponse
+    ...apiResponseState
   },
   reducers: {
     setUserName: (state, action: PayloadAction<string>) => {
