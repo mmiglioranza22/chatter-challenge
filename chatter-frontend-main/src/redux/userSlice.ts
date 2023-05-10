@@ -49,10 +49,6 @@ export const createUser = createAsyncThunk('user/createUser', async (data: FormD
   try {
     const response = await apiClient.post('/signup', data)
     return response.data;
-    // if (response.data.message) {
-    //   dispatch(actions.setUserName(username))
-    //   return NotificationSuccess(response.data.message)
-    // }
   } catch (error: any | unknown) {
     const errorResponse: APIResponse = generateApiErrorResponse(error) 
     return thunkAPI.rejectWithValue(errorResponse) 
@@ -117,7 +113,7 @@ export const userSlice = createSlice({
     // Reset error upon successful API responses.
     builder.addMatcher(
       (action)  => isFulfilledAction(action),
-      (state, action) => {
+      (state) => {
         state.error = {};
       }) 
     }
