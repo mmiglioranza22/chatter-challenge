@@ -8,7 +8,7 @@ import empty from '../assets/images/empty.png';
 import MyProfile from '../components/MyProfile';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser } from '../redux/userSlice';
-import { Chat, LogoType } from '../types/chat';
+import { Chat, LogoType, FormDataType } from '../types/chat';
 import { getChats, setIsAllowedExpand } from '../redux/chatsSlice';
 import ChatHeader from '../components/HomeChat/ChatHeader';
 import ConfigDropdown from '../layout/Dropdowns/Config';
@@ -16,7 +16,7 @@ import SearchBar from '../components/SearchBar';
 import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
 import { LoadRemove } from '../components/Loading';
-import { fetchUserChats } from '../redux/chatActions';
+import { fetchUserChats, createChat } from '../redux/chatActions';
 import { deleteUser } from '../redux/userActions'
 
 
@@ -47,14 +47,17 @@ function HomeChat() {
   useEffect(() => {
     /* 
       TODO: 
-      1. Get user data 
-      2. Get chats data
+      1. Get user data - DONE by selector 
+      2. Get chats data - DONE
     */
-   // eslint-disable-next-line no-console
-   console.log({chats, userData})
    getChatsData()
    LoadRemove()
   }, []);
+
+  useEffect(() => {
+  // eslint-disable-next-line no-console
+  console.log({userData, chats})
+  })
 
   useEffect(() => {
     if (ref.current) {
@@ -67,7 +70,7 @@ function HomeChat() {
       /*
         TODO: 
           1. Listen the socket - later
-          2. Get chat data
+          2. Get chat data ---> ????
           3. Set the socket off and return void to prevent useless renders - later
       */
 
@@ -83,11 +86,11 @@ function HomeChat() {
       setMsgEntry('');
       /*
         TODO:
-        1. Send message
+        1. Send message -> post('/chats/:chatId')
       */
     } else {
       /* TODO: 
-        1. Show error notification
+        1. Show error notification -> en la action ?
       */
     }
   };
@@ -110,14 +113,24 @@ function HomeChat() {
     /* TODO: 
       Get all chats data - DONE
     */
+   // eslint-disable-next-line no-console
+   console.log('getChatsData')
     dispatch(fetchUserChats(userData))
   };
 
   const deleteUserAction = () => {
     dispatch(deleteUser(userData))
   }
-// WIP
-  const createNewChat = () => {}
+
+  const createNewChat = (data: FormDataType) => {
+    dispatch(createChat(data, userData))
+    getChatsData()
+  }
+
+  const deleteChat = (chatId: string) => {
+    // eslint-disable-next-line no-console
+    console.log('Chat deleted!', chatId)
+  }
 
   return (
     <div className="main-wrapper-chat d-flex row flex-grow-1 w-85" data-aos="zoom-in">
@@ -161,6 +174,7 @@ function HomeChat() {
                 userData={userData}
                 selectedChat={selectedChat}
                 onClick={() => handleChatClick(tab.chatId)}
+                deleteChat={deleteChat}
               />
             ))
           ) : (
