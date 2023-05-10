@@ -31,9 +31,29 @@ export const fetchUserChats = createAsyncThunk('user/fetchUserData', async (user
   }
 });
 
+export const deleteChat = createAsyncThunk('user/deleteChat', async (data: Record<string, any>, thunkAPI) => {
+  try {
+    const { 
+      chatId,
+      userData: {
+        authToken, 
+        userId 
+      }
+    } = data
+    const config: AxiosRequestConfig = {
+      data: { user: userId },
+      headers: { Authorization: `Bearer ${authToken}` }
+    }
+    const response = await apiClient.delete(`/chats/${chatId}`, config)
+    return response.data;
+  } catch (error: any | unknown) {
+    const errorResponse: APIResponse = generateApiErrorResponse(error)
+    return thunkAPI.rejectWithValue(errorResponse) 
+  }
+});
+
 const isRejectedAction = isRejected(fetchUserChats)
 const isFulfilledAction = isFulfilled(fetchUserChats)
-
 
 export const chatsSlice = createSlice({
   name: 'chats',
@@ -53,6 +73,10 @@ export const chatsSlice = createSlice({
     // Fetch chats
     builder.addCase(fetchUserChats.fulfilled, (state, action) => {
       state.chats = action.payload.chats;
+    })
+    // Delete chats
+    builder.addCase(deleteChat.fulfilled, (state, action) => {
+      state.message = action.payload.message;
     })
     // Error handler for all actions
     builder.addMatcher(

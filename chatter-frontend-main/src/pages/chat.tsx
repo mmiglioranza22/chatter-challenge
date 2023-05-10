@@ -10,7 +10,7 @@ import MyProfile from '../components/MyProfile';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser } from '../redux/userSlice';
 import { Chat, LogoType, FormDataType } from '../types/chat';
-import { getChats, setIsAllowedExpand, fetchUserChats } from '../redux/chatsSlice';
+import { getChats, setIsAllowedExpand, fetchUserChats, deleteChat } from '../redux/chatsSlice';
 import ChatHeader from '../components/HomeChat/ChatHeader';
 import ConfigDropdown from '../layout/Dropdowns/Config';
 import SearchBar from '../components/SearchBar';
@@ -136,7 +136,6 @@ function HomeChat() {
           (${resultAction.payload.status} ${resultAction.payload.statusText}).`
           NotificationFailure(message)
         } else {
-          // case for API errors without messages and other
           NotificationFailure(`${resultAction.error.message}`)
         }
         LoadRemove()
@@ -150,9 +149,20 @@ function HomeChat() {
     // cerrar el config desde acá, usar un handler o subir el estado acá
   }
 
-  const deleteChat = (chatId: string) => {
-    // eslint-disable-next-line no-console
-    console.log('Chat deleted!', chatId)
+  const handleDeleteChat = async (chatId: string) => {
+    const resultAction: any = await dispatch(deleteChat({ chatId, userData }))
+    if (deleteChat.fulfilled.match(resultAction)) {
+      getChatsData()
+      NotificationSuccess(resultAction.payload.message || 'Chat deleted successfully!')
+    } else {
+      if (resultAction.payload) {
+        const message = `${resultAction.payload.message}.
+        (${resultAction.payload.status} ${resultAction.payload.statusText}).`
+        NotificationFailure(message)
+      } else {
+        NotificationFailure(`${resultAction.error.message}`)
+      }
+    } 
   }
 
   return (
@@ -197,7 +207,7 @@ function HomeChat() {
                 userData={userData}
                 selectedChat={selectedChat}
                 onClick={() => handleChatClick(tab.chatId)}
-                deleteChat={deleteChat}
+                deleteChat={handleDeleteChat}
               />
             ))
           ) : (
