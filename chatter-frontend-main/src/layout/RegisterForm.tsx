@@ -60,14 +60,12 @@ function Register() {
       2. Display a success notification (or error). - DONE
     */
     if (!Object.keys(hasError).length) {
-      // eslint-disable-next-line no-console
-      console.log({hasError})
       const resultAction: any = await dispatch(createUser(data))
       if (createUser.fulfilled.match(resultAction)) {
+        router.push('/')
         NotificationSuccess(resultAction.payload.message || 'User created successfully!')
       } else {
         if (resultAction.payload) {
-          console.log(resultAction)
           const message = `${resultAction.payload.message}.
           (${resultAction.payload.status} ${resultAction.payload.statusText}).`
           NotificationFailure(message)
@@ -80,12 +78,6 @@ function Register() {
       setError(hasError)
     }
   };
-
-  useEffect(() => {
-    if(user && user.name && user.name === formData.name) {
-      router.push('/')
-    } 
-  }, [user])
 
   return (
     <div
