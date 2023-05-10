@@ -1,5 +1,5 @@
 import { chatsSlice } from './chatsSlice';
-import { UserDataState } from '../types/types';
+import { UserDataState, FormDataType } from '../types/types';
 import apiClient from '../utils/client';
 import { AppThunk } from './store';
 import { AxiosRequestConfig } from 'axios';
@@ -16,9 +16,26 @@ export const fetchUserChats = (user: UserDataState): AppThunk => {
         headers: { Authorization: `Bearer ${authToken}` }
       }
       const response = await apiClient.get('/chats', config)
-      // eslint-disable-next-line no-console
-      console.log(response.data)
       dispatch(actions.setChatsData(response.data.chats))
+    } catch (err: any | unknown) {
+      const message = `${err.response.data.message}.\n(${err.response.status} ${err.response.statusText}).`
+      return NotificationFailure(message)
+    }
+  }
+}
+
+export const createChat = (data: FormDataType, user: UserDataState): AppThunk => {
+  return async() => {
+    try {
+      const { authToken, userId, } = user
+      const config: AxiosRequestConfig = {
+        data: { user: userId },
+        headers: { Authorization: `Bearer ${authToken}` }
+      }
+      const response = await apiClient.post('/chats', data, config)
+      if (response.data.message) {
+        return NotificationSuccess(response.data.message)
+      }
     } catch (err: any | unknown) {
       const message = `${err.response.data.message}.\n(${err.response.status} ${err.response.statusText}).`
       return NotificationFailure(message)
