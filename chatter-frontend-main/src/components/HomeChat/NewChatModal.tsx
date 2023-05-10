@@ -5,7 +5,7 @@ import FormData from 'form-data';
 import { ChatModalProps } from '../../types/chat';
 
 function NewChatModal(chatModalProps: ChatModalProps) {
-  const { isOpen, setIsOpen, getChatsData, createNewChat  } = chatModalProps;
+  const { isOpen, setIsOpen, createNewChat } = chatModalProps;
 
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [newChatName, setNewChatName] = useState<any | null>();
@@ -17,15 +17,12 @@ function NewChatModal(chatModalProps: ChatModalProps) {
     data.append('image', selectedImage);
     /*
         TODO:
-        1. Create new chat and ---> createNewChat
-        2. Update chats queue with getChatsData to display it ---> getChatsData
-        3. Close popup with handleClose
-
-        Los de bowser y peach son mock, pero debería poder eliminarlos
+        1. Create new chat and -> DONE
+        2. Update chats queue with getChatsData to display it ---> DONE
+        3. Close popup with handleClose -> DONE
     */
    createNewChat(data)
-  //  getChatsData()
-   setIsOpen(false)
+   handleClose()
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

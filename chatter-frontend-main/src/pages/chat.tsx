@@ -10,15 +10,20 @@ import MyProfile from '../components/MyProfile';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser } from '../redux/userSlice';
 import { Chat, LogoType, FormDataType } from '../types/chat';
-import { getChats, setIsAllowedExpand, fetchUserChats, deleteChat } from '../redux/chatsSlice';
+import { 
+  getChats,
+  setIsAllowedExpand,
+  fetchUserChats,
+  deleteChat,
+  createChat 
+} from '../redux/chatsSlice';
 import ChatHeader from '../components/HomeChat/ChatHeader';
 import ConfigDropdown from '../layout/Dropdowns/Config';
 import SearchBar from '../components/SearchBar';
 import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
 import { LoadRemove, LoadStart } from '../components/Loading';
-import { createChat } from '../redux/chatActions';
-import { deleteUser, setLogoutData } from '../redux/userSlice'
+import { deleteUser, setLogoutData, fetchUserData } from '../redux/userSlice'
 import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
 
 
@@ -38,10 +43,9 @@ function HomeChat() {
 
   const ref = useRef<any>();
 
+  const userData = useAppSelector(getUser);
   const chats = useAppSelector(getChats);
   const dispatch = useAppDispatch();
-
-  const userData = useAppSelector(getUser);
 
   const positionRef = useRef<any>();
 
@@ -53,14 +57,12 @@ function HomeChat() {
       1. Get user data - DONE by selector 
       2. Get chats data - DONE
     */
-   // eslint-disable-next-line no-console
-   console.log('mounts')
-  //  getChatsData()
+    getChatsData()
   }, []);
 
   useEffect(() => {
   // eslint-disable-next-line no-console
-  console.log({userData, chats})
+  // console.log({userData, chats})
   })
 
   useEffect(() => {
@@ -142,11 +144,23 @@ function HomeChat() {
       }
   }
 
-  const handleCreateChat = (data: FormDataType) => {
-    dispatch(createChat(data, userData))
-    getChatsData()
-    
-    // cerrar el config desde acá, usar un handler o subir el estado acá
+  const handleCreateChat = async (chatData: FormDataType) => {
+    LoadStart()
+    const resultAction: any = await dispatch(createChat({ chatData, userData: userData }))
+    if (createChat.fulfilled.match(resultAction)) {
+      getChatsData()
+      NotificationSuccess(resultAction.payload.message || 'User deleted successfully!')
+      LoadRemove()
+    } else {
+      if (resultAction.payload) {
+        const message = `${resultAction.payload.message}.
+        (${resultAction.payload.status} ${resultAction.payload.statusText}).`
+        NotificationFailure(message)
+      } else {
+        NotificationFailure(`${resultAction.error.message}`)
+      }
+      LoadRemove()
+    }
   }
 
   const handleDeleteChat = async (chatId: string) => {

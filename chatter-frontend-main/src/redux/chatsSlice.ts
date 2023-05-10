@@ -23,7 +23,7 @@ export const fetchUserChats = createAsyncThunk('user/fetchUserData', async (user
         data: { user: userId },
         headers: { Authorization: `Bearer ${authToken}` }
       }
-    const response = await apiClient.get('/users', config)
+    const response = await apiClient.get('/chats', config)
     return response.data;
   } catch (error: any | unknown) {
     const errorResponse: APIResponse = generateApiErrorResponse(error)
@@ -52,6 +52,30 @@ export const deleteChat = createAsyncThunk('user/deleteChat', async (data: Recor
   }
 });
 
+export const createChat = createAsyncThunk('user/createChat', async (data: Record<string, any>, thunkAPI) => {
+  try {
+    const {
+      chatData,
+      userData: {
+        authToken,
+        userId
+      }
+    } = data
+    const config: AxiosRequestConfig = {
+      data: { user: userId },
+      headers: { Authorization: `Bearer ${authToken}` },
+    }
+    const response = await apiClient.post('/chats', chatData, config)
+    return response.data;
+  } catch (error: any | unknown) {
+    const errorResponse: APIResponse = generateApiErrorResponse(error)
+    // eslint-disable-next-line no-console
+    console.log(error)
+    return thunkAPI.rejectWithValue(errorResponse) 
+  }
+});
+
+// post('/chats/:chatId' -> sendMessage
 const isRejectedAction = isRejected(fetchUserChats)
 const isFulfilledAction = isFulfilled(fetchUserChats)
 
@@ -74,8 +98,12 @@ export const chatsSlice = createSlice({
     builder.addCase(fetchUserChats.fulfilled, (state, action) => {
       state.chats = action.payload.chats;
     })
-    // Delete chats
+    // Delete chat
     builder.addCase(deleteChat.fulfilled, (state, action) => {
+      state.message = action.payload.message;
+    })
+    // Create chat
+    builder.addCase(createChat.fulfilled, (state, action) => {
       state.message = action.payload.message;
     })
     // Error handler for all actions
