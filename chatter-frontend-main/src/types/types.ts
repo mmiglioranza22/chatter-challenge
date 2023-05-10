@@ -102,10 +102,4 @@ export interface ConfirmDialogProps {
 	isOpen: boolean;
 }
 
-export interface ApiError {
-	errorCode: string | number,
-  errorMessage: string,
-  meta?: Record<any, any>
-}
-
 export type FormDataType = FormData

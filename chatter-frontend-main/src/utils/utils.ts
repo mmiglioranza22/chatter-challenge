@@ -1,3 +1,4 @@
+import { APIResponse } from "../types/chat"
 import { LoginData } from "../types/login"
 import { RegisterData } from "../types/register" 
 export const validateLogin = (values: LoginData) => {
@@ -43,4 +44,13 @@ export const validateRegister = (values: RegisterData) => {
   } 
   // image check not implemented, checked by API
   return error
+}
+
+export const generateApiErrorResponse = (error: any | unknown): APIResponse => {
+  const { response } = error  
+  return {
+    message: response.data.message,
+    status: response.status,
+    statusText: response.statusText
+  }
 }

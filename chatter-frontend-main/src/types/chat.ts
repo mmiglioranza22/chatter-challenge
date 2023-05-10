@@ -120,7 +120,7 @@ export interface TicketData {
 
 export type FormDataType = FormData
 
-export interface APIError {
+export interface APIResponse {
   error?: any,
   message?: string,
   status?: number,
