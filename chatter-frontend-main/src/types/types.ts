@@ -1,5 +1,5 @@
 import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
-
+import FormData from 'form-data';
 export interface UserDataState {
 	name?: string;
 	lastName?: string;
@@ -107,3 +107,5 @@ export interface ApiError {
   errorMessage: string,
   meta?: Record<any, any>
 }
+
+export type FormDataType = FormData

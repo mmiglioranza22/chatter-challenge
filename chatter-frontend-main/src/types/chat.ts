@@ -1,5 +1,5 @@
+import FormData from 'form-data';
 import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
-
 export interface UserDataState {
   name?: string;
   lastName?: string;
@@ -40,8 +40,8 @@ export interface DropDownProps {
   getChatsData: any;
   userData: UserDataState;
   isOpen: Boolean;
-  deleteUser: Function;
-  createNewChat: Function;
+  deleteUser: Function; // Dispatch<SetStateAction<Chat>
+  createNewChat: Function; //Dispatch<SetStateAction<Chat>
 }
 
 export interface ChatsMessagesProps {
@@ -77,6 +77,7 @@ export interface ChatTabProps {
   userData?: UserDataState;
   selectedChat?: string;
   onClick?: MouseEventHandler<HTMLDivElement>;
+  deleteChat: Function; // Dispatch<SetStateAction<Chat>
 }
 
 export interface ChatModalProps {
@@ -84,7 +85,7 @@ export interface ChatModalProps {
   setIsOpen: Function;
   userData: UserDataState;
   getChatsData: any;
-  createNewChat: Function;
+  createNewChat: Function; // Dispatch<SetStateAction<Chat>
 }
 
 export interface ConfirmDialogProps {
@@ -116,3 +117,5 @@ export interface TicketData {
   priority: TicketPriority;
   status: TicketStatus;
 }
+
+export type FormDataType = FormData
