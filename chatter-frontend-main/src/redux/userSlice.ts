@@ -1,8 +1,9 @@
-import { createSlice, PayloadAction, createAsyncThunk, isRejected } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk, isRejected, isFulfilled } from '@reduxjs/toolkit';
 import type { RootState } from './store';
-import { UserDataState, APIError, FormDataType } from '../types/chat';
+import { UserDataState, APIResponse, FormDataType } from '../types/chat';
 import apiClient from '../utils/client';
 import { AxiosRequestConfig } from 'axios';
+import { generateApiErrorResponse } from '../utils/utils';
 
 const initialState: UserDataState = {
   name: '',
@@ -13,7 +14,7 @@ const initialState: UserDataState = {
   authToken: ''
 };
 
-const errorState: APIError = {
+const apiResponse: APIResponse = {
   message: '',
 }
 
@@ -24,12 +25,7 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData: Fo
     const response = await apiClient.post('/login', loginData)
     return response.data;
   } catch (error: any | unknown) {
-    const { response } = error
-    const errorResponse: APIError = {
-      message: response.data.message,
-      status: response.status,
-      statusText: response.statusText
-    }
+    const errorResponse: APIResponse = generateApiErrorResponse(error)
     return thunkAPI.rejectWithValue(errorResponse) 
   }
 });
@@ -44,23 +40,33 @@ export const fetchUserData = createAsyncThunk('user/fetchUserData', async (user:
     const response = await apiClient.get('/users', config)
     return response.data;
   } catch (error: any | unknown) {
-    const { response } = error
-    const errorResponse: APIError = {
-      message: response.data.message,
-      status: response.status,
-      statusText: response.statusText
-    }
+    const errorResponse: APIResponse = generateApiErrorResponse(error)
     return thunkAPI.rejectWithValue(errorResponse) 
   }
 });
 
-const isARejectedAction = isRejected(loginUser, fetchUserData)
+export const createUser = createAsyncThunk('user/createUser', async (data: FormDataType , thunkAPI) => {
+  try {
+    const response = await apiClient.post('/signup', data)
+    return response.data;
+    // if (response.data.message) {
+    //   dispatch(actions.setUserName(username))
+    //   return NotificationSuccess(response.data.message)
+    // }
+  } catch (error: any | unknown) {
+    const errorResponse: APIResponse = generateApiErrorResponse(error) 
+    return thunkAPI.rejectWithValue(errorResponse) 
+  }
+});
+
+const isRejectedAction = isRejected(loginUser, fetchUserData, createUser)
+const isFulfilledAction = isFulfilled(loginUser, fetchUserData, createUser)
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
     ...initialState,
-    ...errorState
+    ...apiResponse
   },
   reducers: {
     setUserName: (state, action: PayloadAction<string>) => {
@@ -90,7 +96,6 @@ export const userSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.userId = action.payload.userId
       state.authToken = action.payload.token
-      state.error = {}
     })
     // User data
     builder.addCase(fetchUserData.fulfilled, (state, action) => {
@@ -99,12 +104,22 @@ export const userSlice = createSlice({
       state.email = action.payload.email;
       state.photo = action.payload.photo;
     })
+    // Create new user
+    builder.addCase(createUser.fulfilled, (state, action) => {
+     state.message = action.payload
+    })
     // Error handler for all actions
     builder.addMatcher(
-      (action)  => isARejectedAction(action),
+      (action)  => isRejectedAction(action),
       (state, action) => {
         state.error = action.payload || action.error;
       })
+    // Reset error upon successful API responses.
+    builder.addMatcher(
+      (action)  => isFulfilledAction(action),
+      (state, action) => {
+        state.error = {};
+      }) 
     }
 });
 

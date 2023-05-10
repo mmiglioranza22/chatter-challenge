@@ -39,6 +39,11 @@ function LoginForm() {
     setToken('')
     LoadRemove() 
   }, [])
+
+  useEffect(() => {
+  // eslint-disable-next-line no-console
+  console.log('login', user)
+  })
   
   useEffect(() => {
     const { authToken, userId } = user
@@ -61,12 +66,11 @@ function LoginForm() {
       2. Handle errors (if there is at least one) - DONE
     */
     if (!Object.keys(hasError).length) {
-      const resultAction:any = await dispatch(loginUser(data))
+      const resultAction: any = await dispatch(loginUser(data))
       if (loginUser.fulfilled.match(resultAction)) {
         NotificationSuccess('Logged in!')
       } else {
         if (resultAction.payload) {
-          console.log(resultAction)
           const message = `${resultAction.payload.message}.
           (${resultAction.payload.status} ${resultAction.payload.statusText}).`
           NotificationFailure(message)

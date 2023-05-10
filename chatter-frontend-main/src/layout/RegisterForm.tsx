@@ -4,9 +4,10 @@ import FormData from 'form-data';
 import { RegisterData } from '../types/register';
 import Field from '../components/Home/Field';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { createUser } from '../redux/userActions'
+import { createUser } from '../redux/userSlice'
 import { useRouter } from 'next/dist/client/router';
 import { validateRegister } from '../utils/utils';
+import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
 
 function Register() {
   const initialValues: RegisterData = {
@@ -24,6 +25,10 @@ function Register() {
   const dispatch = useAppDispatch()
 
   const data = new FormData();
+  useEffect(() => {
+  // eslint-disable-next-line no-console
+  console.log('register', user)
+  })
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files != null) {
@@ -42,7 +47,7 @@ function Register() {
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const hasError = validateRegister(formData)
     data.append('image', selectedImage);
     data.append('name', formData.name);
@@ -55,7 +60,22 @@ function Register() {
       2. Display a success notification (or error). - DONE
     */
     if (!Object.keys(hasError).length) {
-      dispatch(createUser(data, formData.name))
+      // eslint-disable-next-line no-console
+      console.log({hasError})
+      const resultAction: any = await dispatch(createUser(data))
+      if (createUser.fulfilled.match(resultAction)) {
+        NotificationSuccess(resultAction.payload.message || 'User created successfully!')
+      } else {
+        if (resultAction.payload) {
+          console.log(resultAction)
+          const message = `${resultAction.payload.message}.
+          (${resultAction.payload.status} ${resultAction.payload.statusText}).`
+          NotificationFailure(message)
+        } else {
+          // case for API errors without messages and other
+          NotificationFailure(`${resultAction.error.message}`)
+        }
+      }
     } else {
       setError(hasError)
     }
