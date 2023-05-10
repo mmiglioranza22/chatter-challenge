@@ -95,7 +95,7 @@ const ChatTabDots = styled.div`
 `;
 
 function ChatTab(chatTabProps: ChatTabProps) {
-  const { name, image: photo, chatId, messages, selectedChat, onClick } = chatTabProps;
+  const { name, image: photo, chatId, messages, selectedChat, onClick, deleteChat } = chatTabProps;
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -109,6 +109,7 @@ function ChatTab(chatTabProps: ChatTabProps) {
       TODO: 
       1. Delete chat
     */
+      deleteChat(chatId)
   };
 
   const handleOpenModal = () => {
