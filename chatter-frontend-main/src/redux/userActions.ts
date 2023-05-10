@@ -1,4 +1,7 @@
+
 // * different approach for async actions interacting with API, not implemented but possible (resembles older version for handling actions)
+// * THIS IS NOT IMPLEMENTED SINCE createAsyncThunk IS BETTER ADAPTED FOR API REQUESTS
+// https://redux-toolkit.js.org/usage/usage-guide#async-requests-with-createasyncthunk
 import { userSlice } from './userSlice';
 import { UserDataState, FormDataType } from '../types/types';
 import apiClient from '../utils/client';
