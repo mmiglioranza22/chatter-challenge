@@ -130,7 +130,7 @@ export const userSlice = createSlice({
       (state, action) => {
         state.error = action.payload || action.error;
       })
-    // Reset error upon successful API responses.
+    // Clear stale errors upon successful API responses.
     builder.addMatcher(
       (action)  => isFulfilledAction(action),
       (state) => {

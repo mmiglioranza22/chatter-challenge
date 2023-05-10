@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/dist/client/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { IoMdSettings } from 'react-icons/io';
@@ -15,9 +16,10 @@ import ConfigDropdown from '../layout/Dropdowns/Config';
 import SearchBar from '../components/SearchBar';
 import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
-import { LoadRemove } from '../components/Loading';
+import { LoadRemove, LoadStart } from '../components/Loading';
 import { fetchUserChats, createChat } from '../redux/chatActions';
-import { deleteUser } from '../redux/userActions'
+import { deleteUser, setLogoutData } from '../redux/userSlice'
+import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
 
 
 function HomeChat() {
@@ -28,6 +30,7 @@ function HomeChat() {
     name: ''
   };
 
+  const router = useRouter()
   const [msgEntry, setMsgEntry] = useState<string>('');
   const [selectedChat, setSelectedChat] = useState<string>('');
   const [userChatData, setUserChatData] = useState(chatHeaderInitialState);
@@ -50,8 +53,9 @@ function HomeChat() {
       1. Get user data - DONE by selector 
       2. Get chats data - DONE
     */
-   getChatsData()
-   LoadRemove()
+   // eslint-disable-next-line no-console
+   console.log('mounts')
+  //  getChatsData()
   }, []);
 
   useEffect(() => {
@@ -115,16 +119,35 @@ function HomeChat() {
     */
    // eslint-disable-next-line no-console
    console.log('getChatsData')
-    dispatch(fetchUserChats(userData))
+    // dispatch(fetchUserChats(userData))
   };
 
-  const deleteUserAction = () => {
-    dispatch(deleteUser(userData))
+  const handleDeleteUser = async () => {
+    LoadStart()
+    const resultAction: any = await dispatch(deleteUser(userData))
+      if (deleteUser.fulfilled.match(resultAction)) {
+        dispatch(setLogoutData());
+        router.push('/')
+        NotificationSuccess(resultAction.payload.message || 'User deleted successfully!')
+        LoadRemove()
+      } else {
+        if (resultAction.payload) {
+          const message = `${resultAction.payload.message}.
+          (${resultAction.payload.status} ${resultAction.payload.statusText}).`
+          NotificationFailure(message)
+        } else {
+          // case for API errors without messages and other
+          NotificationFailure(`${resultAction.error.message}`)
+        }
+        LoadRemove()
+      }
   }
 
-  const createNewChat = (data: FormDataType) => {
+  const handleCreateChat = (data: FormDataType) => {
     dispatch(createChat(data, userData))
     getChatsData()
+    
+    // cerrar el config desde acá, usar un handler o subir el estado acá
   }
 
   const deleteChat = (chatId: string) => {
@@ -153,8 +176,8 @@ function HomeChat() {
               isOpen={configOpen}
               userData={userData}
               getChatsData={getChatsData}
-              createNewChat={createNewChat}
-              deleteUser={deleteUserAction}
+              createNewChat={handleCreateChat}
+              deleteUser={handleDeleteUser}
             />
           </div>
         </div>
