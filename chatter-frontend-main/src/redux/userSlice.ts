@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, /* createAsyncThunk */} from '@reduxjs/toolkit';
 import type { RootState } from './store';
-import { UserDataState } from '../types/chat';
+import { UserDataState, /* FormDataType */ } from '../types/chat';
 // import apiClient from '../utils/client';
-// import FormData from 'form-data';
 
 const initialState: UserDataState = {
   name: '',
@@ -14,7 +13,7 @@ const initialState: UserDataState = {
 };
 
 // createAsyncThunk approach
-// export const loginUser = createAsyncThunk("user/loginUser", async (loginData: FormData) => {
+// export const loginUser = createAsyncThunk("user/loginUser", async (loginData: FormDataType) => {
 //   const response = await apiClient.post('/login', loginData)
 //   return response.data;
 // });

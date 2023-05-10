@@ -1,6 +1,5 @@
 import { userSlice } from './userSlice';
-import { UserDataState } from '../types/types';
-import FormData from 'form-data';
+import { UserDataState, FormDataType } from '../types/types';
 import apiClient from '../utils/client';
 import { AppThunk } from './store';
 import { AxiosRequestConfig } from 'axios';
@@ -8,7 +7,7 @@ import { NotificationFailure, NotificationSuccess } from '../components/Notifica
 
 export const { actions } = userSlice
 
-export const loginUser = (data: FormData): AppThunk => {
+export const loginUser = (data: FormDataType): AppThunk => {
   return async(dispatch) => {
     try {
       const response = await apiClient.post('/login', data)
@@ -18,7 +17,6 @@ export const loginUser = (data: FormData): AppThunk => {
         authToken: token
       }
       dispatch(actions.setLoginData(userData))
-      return NotificationSuccess('Login exitoso!')
     } catch (err: any | unknown) {
       const message = `${err.response.data.message}.\n(${err.response.status} ${err.response.statusText}).`
       return NotificationFailure(message)
@@ -26,7 +24,7 @@ export const loginUser = (data: FormData): AppThunk => {
   }
 }
 
-export const createUser = (data: FormData, username: string): AppThunk => {
+export const createUser = (data: FormDataType, username: string): AppThunk => {
   return async(dispatch) => {
     try {
       const response = await apiClient.post('/signup', data)
