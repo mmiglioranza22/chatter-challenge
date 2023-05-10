@@ -36,7 +36,8 @@ function LoginForm() {
 
   // token is cleaned upon mounting, so all redirects to '/' clear session token.
   useEffect(() => {
-    setToken('') 
+    setToken('')
+    LoadRemove() 
   }, [])
   
   useEffect(() => {
@@ -45,7 +46,6 @@ function LoginForm() {
       setToken(authToken)
       handleFetchUserData(user)
       LoadStart()
-      LoadRemove(2000)
       router.push('/chat')
     }
   }, [user.userId, user.authToken])
