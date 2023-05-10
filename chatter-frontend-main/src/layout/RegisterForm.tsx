@@ -73,7 +73,6 @@ function Register() {
           (${resultAction.payload.status} ${resultAction.payload.statusText}).`
           NotificationFailure(message)
         } else {
-          // case for API errors without messages and other
           NotificationFailure(`${resultAction.error.message}`)
         }
         LoadRemove()
