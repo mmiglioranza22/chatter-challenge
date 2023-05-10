@@ -119,3 +119,10 @@ export interface TicketData {
 }
 
 export type FormDataType = FormData
+
+export interface APIError {
+  error?: any,
+  message?: string,
+  status?: number,
+  statusText?: string
+}
