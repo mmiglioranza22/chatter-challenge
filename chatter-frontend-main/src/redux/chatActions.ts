@@ -1,3 +1,5 @@
+// * different approach for async actions interacting with API, not implemented but possible (resembles older version for handling actions)
+
 import { chatsSlice } from './chatsSlice';
 import { UserDataState, FormDataType } from '../types/types';
 import apiClient from '../utils/client';
