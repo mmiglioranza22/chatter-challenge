@@ -2,13 +2,10 @@ import { useState, useEffect } from 'react';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import NewChatModal from '../../components/HomeChat/NewChatModal';
 import { DropDownProps } from '../../types/chat';
-import { useRouter } from 'next/dist/client/router';
-import { LoadStart } from '../../components/Loading';
 
 function ConfigDropdown(dropDownProps: DropDownProps) {
   const { getChatsData, userData, isOpen, createNewChat, deleteUser } = dropDownProps;
   
-  const router = useRouter()
   const [prevUser] = useState(userData)
   const [delDialogIsOpen, setDelDialogIsOpen] = useState(false);
   const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
@@ -28,14 +25,7 @@ function ConfigDropdown(dropDownProps: DropDownProps) {
       2. Delete user - DONE
     */
     deleteUser()
-    LoadStart()    
   };
-
-  useEffect(() => {
-    if (prevUser && prevUser.userId && prevUser.userId !== userData.userId) {
-      router.push('/')
-    } 
-  }, [userData])
 
   return (
     <div className={isOpen ? 'configDropdown scale1' : 'configDropdown'}>

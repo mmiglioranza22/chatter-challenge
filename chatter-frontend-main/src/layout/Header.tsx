@@ -5,7 +5,6 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser, setLogoutData } from '../redux/userSlice';
 import { LogoType } from '../types/chat';
-import { LoadStart } from '../components/Loading';
 
 function Header() {
   const image = logo as unknown as LogoType;
@@ -14,7 +13,6 @@ function Header() {
   const dispatch = useAppDispatch();
 
   const signOff = () => {
-    LoadStart()
     dispatch(setLogoutData());
   };
 
