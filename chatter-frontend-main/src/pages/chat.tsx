@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { IoMdSettings } from 'react-icons/io';
 import { HiPhoneMissedCall } from 'react-icons/hi';
+import socket from '../sockets'; 
 
 import empty from '../assets/images/empty.png';
 import MyProfile from '../components/MyProfile';
@@ -36,7 +37,7 @@ function HomeChat() {
     image: '',
     name: ''
   };
-
+  
   const router = useRouter()
   const [tokenSession] = useSessionStorage('tokenSession', '')
   const [userSession] = useSessionStorage('userSession', '')
