@@ -107,7 +107,7 @@ function ChatTab(chatTabProps: ChatTabProps) {
   const eraseChat = () => {
     /* 
       TODO: 
-      1. Delete chat
+      1. Delete chat -> DONE
     */
       deleteChat(chatId)
   };

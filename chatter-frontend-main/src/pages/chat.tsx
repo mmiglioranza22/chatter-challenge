@@ -54,7 +54,7 @@ function HomeChat() {
   useEffect(() => {
     /* 
       TODO: 
-      1. Get user data - DONE by selector 
+      1. Get user data - DONE by selector and on mount 
       2. Get chats data - DONE
     */
     getChatsData()
@@ -117,10 +117,8 @@ function HomeChat() {
 
   const getChatsData = () => {
     /* TODO: 
-      Get all chats data - DONE
+      Get all chats data -> DONE
     */
-   // eslint-disable-next-line no-console
-   console.log('getChatsData')
     dispatch(fetchUserChats(userData))
   };
 

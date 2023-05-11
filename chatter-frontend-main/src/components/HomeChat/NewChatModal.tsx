@@ -18,7 +18,7 @@ function NewChatModal(chatModalProps: ChatModalProps) {
     /*
         TODO:
         1. Create new chat and -> DONE
-        2. Update chats queue with getChatsData to display it ---> DONE
+        2. Update chats queue with getChatsData to display it -> DONE in createNewChat callback
         3. Close popup with handleClose -> DONE
     */
    createNewChat(data)
