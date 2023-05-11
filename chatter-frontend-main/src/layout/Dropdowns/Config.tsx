@@ -21,8 +21,8 @@ function ConfigDropdown(dropDownProps: DropDownProps) {
   const handleConfirmDelete = () => {
     /* 
       TODO: 
-      1. Get current user data - DONE in HomeChat component
-      2. Delete user - DONE
+      1. Get current user data -> DONE in HomeChat component
+      2. Delete user -> DONE
     */
     deleteUser()
   };

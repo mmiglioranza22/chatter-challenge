@@ -64,8 +64,8 @@ function LoginForm() {
     data.append('password', formData.password);
     /* 
       TODO: 
-      1. Check login  - DONE
-      2. Handle errors (if there is at least one) - DONE
+      1. Check login  -> DONE
+      2. Handle errors (if there is at least one) -> DONE
     */
     if (!Object.keys(hasError).length) {
       LoadStart()

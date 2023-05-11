@@ -57,8 +57,8 @@ function Register() {
     data.append('password', formData.password);
     /* 
       TODO: 
-      1. Make a new user - DONE
-      2. Display a success notification (or error). - DONE
+      1. Make a new user -> DONE
+      2. Display a success notification (or error). -> DONE
     */
     if (!Object.keys(hasError).length) {
       LoadStart()
