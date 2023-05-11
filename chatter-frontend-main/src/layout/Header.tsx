@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 import logo from '../assets/images/logo_chatter_color_2.png';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser, setLogoutData } from '../redux/userSlice';
+import { clearChats } from '../redux/chatsSlice';
 import { LogoType } from '../types/chat';
 
 function Header() {
@@ -14,6 +16,7 @@ function Header() {
 
   const signOff = () => {
     dispatch(setLogoutData());
+    dispatch(clearChats())
   };
 
   return (

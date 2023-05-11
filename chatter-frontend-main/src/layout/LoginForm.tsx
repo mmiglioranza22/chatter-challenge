@@ -21,7 +21,8 @@ function LoginForm() {
   const router = useRouter()
   const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
-  const [token, setToken] = useSessionStorage('token', '')
+  const [tokenSession, setTokenSession] = useSessionStorage('tokenSession', '')
+  const [userSession, setUserSession] = useSessionStorage('userSession', '')
 
   const [formData, setFormData] = useState<LoginData>(initialValues);
   const [error, setError] = useState<any | undefined>();
@@ -34,10 +35,9 @@ function LoginForm() {
   };
 
   useEffect(() => {
-    // token is cleaned upon mounting, so all redirects to '/' clear session token.
-    // ? CHECK: remove this for persisting token in dev builds refreshes upon saving?
-    setToken('')
-    // LoadRemove() 
+    // token is cleaned upon mounting. Redirects to '/' or refresh there will clear the session token.
+    setTokenSession('')
+    setUserSession('')
     return () => {
       LoadRemove()
     }
@@ -51,7 +51,8 @@ function LoginForm() {
   useEffect(() => {
     const { authToken, userId } = user
     if (authToken && userId) {
-      setToken(authToken)
+      setTokenSession(authToken)
+      setUserSession(userId)
       handleFetchUserData(user)
       router.push('/chat')
     }

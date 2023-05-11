@@ -76,8 +76,8 @@ export const createChat = createAsyncThunk('user/createChat', async (data: Recor
 });
 
 // post('/chats/:chatId' -> sendMessage
-const isRejectedAction = isRejected(fetchUserChats)
-const isFulfilledAction = isFulfilled(fetchUserChats)
+const isRejectedAction = isRejected(fetchUserChats, deleteChat, createChat)
+const isFulfilledAction = isFulfilled(fetchUserChats, deleteChat, createChat)
 
 export const chatsSlice = createSlice({
   name: 'chats',
@@ -91,6 +91,9 @@ export const chatsSlice = createSlice({
     },
     setIsAllowedExpand: (state, action: PayloadAction<boolean>) => {
       state.isAllowedExpand = action.payload;
+    },
+    clearChats: (state) => {
+      state.chats = []
     }
   },
   extraReducers: builder => {
@@ -121,7 +124,7 @@ export const chatsSlice = createSlice({
     }
 });
 
-export const { setChatsData, setIsAllowedExpand } = chatsSlice.actions;
+export const { setChatsData, setIsAllowedExpand, clearChats } = chatsSlice.actions;
 
 export const getChats = (state: RootState) => state.chats;
 export const getIsAllowedExpand = (state: RootState) => state.chats.isAllowedExpand;

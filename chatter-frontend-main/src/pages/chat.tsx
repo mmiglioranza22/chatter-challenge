@@ -23,8 +23,10 @@ import SearchBar from '../components/SearchBar';
 import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
 import { LoadRemove, LoadStart } from '../components/Loading';
-import { deleteUser, setLogoutData, fetchUserData } from '../redux/userSlice'
+import { deleteUser, setLogoutData, fetchUserData, setLoginData } from '../redux/userSlice'
 import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
+import { useSessionStorage } from '../utils/customHooks';
+import { UserDataState } from '../types/types';
 
 
 function HomeChat() {
@@ -36,6 +38,9 @@ function HomeChat() {
   };
 
   const router = useRouter()
+  const [tokenSession, setTokenSession] = useSessionStorage('tokenSession', '')
+  const [userSession, setUserSession] = useSessionStorage('userSession', '')
+
   const [msgEntry, setMsgEntry] = useState<string>('');
   const [selectedChat, setSelectedChat] = useState<string>('');
   const [userChatData, setUserChatData] = useState(chatHeaderInitialState);
@@ -54,16 +59,19 @@ function HomeChat() {
   useEffect(() => {
     /* 
       TODO: 
-      1. Get user data - DONE by selector and on mount 
-      2. Get chats data - DONE
+      1. Get user data -> DONE by selector and on mount 
+      2. Get chats data -> DONE
     */
-    getChatsData()
+    if (tokenSession && userSession) {
+      const data: UserDataState = {
+        userId: userSession,
+        authToken: tokenSession
+      }
+      dispatch(setLoginData(data))
+      dispatch(fetchUserData(data))
+    }
   }, []);
 
-  useEffect(() => {
-  // eslint-disable-next-line no-console
-  // console.log({userData, chats})
-  })
 
   useEffect(() => {
     if (ref.current) {
@@ -75,9 +83,9 @@ function HomeChat() {
 
       /*
         TODO: 
-          1. Listen the socket - later
+          1. Listen the socket -
           2. Get chat data ---> ????
-          3. Set the socket off and return void to prevent useless renders - later
+          3. Set the socket off and return void to prevent useless renders - 
       */
 
     }
