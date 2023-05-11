@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 import logo from '../assets/images/logo_chatter_color_2.png';
 import { Container, Nav, Navbar } from 'react-bootstrap';

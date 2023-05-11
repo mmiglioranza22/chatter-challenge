@@ -21,8 +21,8 @@ function LoginForm() {
   const router = useRouter()
   const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
-  const [tokenSession, setTokenSession] = useSessionStorage('tokenSession', '')
-  const [userSession, setUserSession] = useSessionStorage('userSession', '')
+  const [_tokenSession, setTokenSession] = useSessionStorage('tokenSession', '')
+  const [_userSession, setUserSession] = useSessionStorage('userSession', '')
 
   const [formData, setFormData] = useState<LoginData>(initialValues);
   const [error, setError] = useState<any | undefined>();

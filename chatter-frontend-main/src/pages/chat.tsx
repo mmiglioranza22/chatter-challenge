@@ -70,6 +70,10 @@ function HomeChat() {
       }
       dispatch(setLoginData(data))
       dispatch(fetchUserData(data))
+    } else {
+      // Hack to protect routes, not the best though
+      router.push('/')
+      NotificationFailure('Not authorized. Please log in.')
     }
   }, []);
 
