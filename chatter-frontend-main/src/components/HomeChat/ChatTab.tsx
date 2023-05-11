@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { IoCheckmarkDoneOutline } from 'react-icons/io5';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { ChatTabProps } from '../../types/chat';
+import { ChatTabProps, TicketData, TicketStatus } from '../../types/chat';
 import ConfirmDialog from '../ConfirmDialog';
 import ContextMenu from '../ContextMenu';
 import ChatTabContextMenu from './ChatTabContextMenu';
+import Ticket from '../Ticket/Ticket';
+import { MockTicketData } from '../../utils/mockData';
 
 const Container = styled.div<{ isSelected: boolean }>`
   display: flex;
@@ -95,9 +97,11 @@ const ChatTabDots = styled.div`
 `;
 
 function ChatTab(chatTabProps: ChatTabProps) {
-  const { name, image: photo, chatId, messages, selectedChat, onClick, deleteChat } = chatTabProps;
+  const { name, image: photo, chatId, messages, userData, selectedChat, onClick, deleteChat } = chatTabProps;
 
   const [isOpen, setIsOpen] = useState(false);
+  const [openTicket, setOpenTicket] = useState(false)
+  const [ticketStatus, setTicketStatus] = useState<TicketStatus>()
 
   const lastMessage = messages[0]
     ? messages.slice(-1)[0].message.slice(0, 55) + '...'
@@ -116,8 +120,19 @@ function ChatTab(chatTabProps: ChatTabProps) {
     setIsOpen(true);
   };
 
+  const handleOpenTicket = (type: TicketStatus) => {
+    setOpenTicket(true)
+    setTicketStatus(type)
+  }
+
+  const mockTicket= useMemo(() => {
+    return MockTicketData.filter(ticket => ticket.status === ticketStatus)[0]
+  }, [ticketStatus])
+
+  const menuComponent = (<ChatTabContextMenu handleOpenTicket={handleOpenTicket} />)
+
   return (
-    <ContextMenu menuComponent={<ChatTabContextMenu />}>
+    <ContextMenu menuComponent={menuComponent}>
       <Container id="chatTab" isSelected={selectedChat === chatId} onClick={onClick}>
         <Wrapper>
           <ChatPhoto>
@@ -139,7 +154,18 @@ function ChatTab(chatTabProps: ChatTabProps) {
         <ChatTabDots className="dots" onClick={handleOpenModal}>
           <BsThreeDotsVertical />
         </ChatTabDots>
-
+        <Ticket
+          title={mockTicket?.title}
+          description={mockTicket?.description}
+          tag={mockTicket?.tag}
+          brand={mockTicket?.brand}
+          id={mockTicket?.id}
+          date={mockTicket?.date}
+          priority={mockTicket?.priority}
+          status={mockTicket?.status}
+          isOpen={openTicket}
+          handleClose={setOpenTicket}
+        />
         <ConfirmDialog
           title="Eliminar chat"
           text="¿Está seguro que desea borrar la conversación?"

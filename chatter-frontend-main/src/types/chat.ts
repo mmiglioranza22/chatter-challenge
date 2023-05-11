@@ -116,6 +116,8 @@ export interface TicketData {
   date: Date;
   priority: TicketPriority;
   status: TicketStatus;
+  isOpen?: boolean;
+  handleClose?: Function;
 }
 
 export type FormDataType = FormData
@@ -126,3 +128,6 @@ export interface APIResponse {
   status?: number,
   statusText?: string
 }
+export interface ChatTabContextMenuProps {
+  handleOpenTicket: Function;
+ }

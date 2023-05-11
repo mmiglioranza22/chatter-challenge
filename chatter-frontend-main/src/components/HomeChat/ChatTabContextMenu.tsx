@@ -1,5 +1,6 @@
 import * as Menu from '@radix-ui/react-context-menu';
 import styled from 'styled-components';
+import { ChatTabContextMenuProps, TicketStatus } from '../../types/chat';
 
 const Container = styled.div`
   background-color: #fff;
@@ -19,15 +20,19 @@ const Item = styled(Menu.Item)`
   }
 `;
 
-export default function ChatTabContextMenu() {
+export default function ChatTabContextMenu(menuProps: ChatTabContextMenuProps) {
+const { handleOpenTicket } = menuProps
+
   const handleShowOpenTicket = () => {
     console.log('Opened ticket...');
-    // TODO: Show open ticket component.
+    // TODO: Show open ticket component. -> DONE in callback
+    handleOpenTicket(TicketStatus.OPEN)
   };
 
   const handleShowClosedTicket = () => {
     console.log('Closed ticket...');
-    // TODO: Show closed ticket component.
+    // TODO: Show closed ticket component. -> DONE in callback
+    handleOpenTicket(TicketStatus.CLOSED)
   };
 
   return (
