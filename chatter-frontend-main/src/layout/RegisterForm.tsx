@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import FormData from 'form-data';
 import { RegisterData } from '../types/register';
 import Field from '../components/Home/Field';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch } from '../redux/hooks';
 import { createUser } from '../redux/userSlice'
 import { useRouter } from 'next/dist/client/router';
 import { validateRegister } from '../utils/utils';
@@ -22,14 +22,9 @@ function Register() {
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [formData, setFormData] = useState<RegisterData>(initialValues);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
-  const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
 
   const data = new FormData();
-  useEffect(() => {
-  // eslint-disable-next-line no-console
-  // console.log('register', user)
-  })
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files != null) {

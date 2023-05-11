@@ -38,8 +38,8 @@ function HomeChat() {
   };
 
   const router = useRouter()
-  const [tokenSession, setTokenSession] = useSessionStorage('tokenSession', '')
-  const [userSession, setUserSession] = useSessionStorage('userSession', '')
+  const [tokenSession] = useSessionStorage('tokenSession', '')
+  const [userSession] = useSessionStorage('userSession', '')
 
   const [msgEntry, setMsgEntry] = useState<string>('');
   const [selectedChat, setSelectedChat] = useState<string>('');

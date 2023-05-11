@@ -44,11 +44,6 @@ function LoginForm() {
   }, [])
 
   useEffect(() => {
-  // eslint-disable-next-line no-console
-  // console.log('login', user)
-  })
-  
-  useEffect(() => {
     const { authToken, userId } = user
     if (authToken && userId) {
       setTokenSession(authToken)
