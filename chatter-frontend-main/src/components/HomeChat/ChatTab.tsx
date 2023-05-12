@@ -97,7 +97,7 @@ const ChatTabDots = styled.div`
 `;
 
 function ChatTab(chatTabProps: ChatTabProps) {
-  const { name, image: photo, chatId, messages, userData, selectedChat, onClick, deleteChat } = chatTabProps;
+  const { name, image: photo, chatId, messages, selectedChat, onClick, deleteChat } = chatTabProps;
 
   const [isOpen, setIsOpen] = useState(false);
   const [openTicket, setOpenTicket] = useState(false)

@@ -11,7 +11,6 @@ export default function ContextMenu(contextMenuProps: ContextMenuProps) {
   return (
     <Menu.Root>
       <Menu.Trigger asChild>{children}</Menu.Trigger>
-
       <Menu.Portal>
         <Menu.Content asChild>
           <div>{menuComponent}</div>

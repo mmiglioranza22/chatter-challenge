@@ -48,7 +48,7 @@ function Register() {
     data.append('image', selectedImage);
     data.append('name', formData.name);
     data.append('lastName', formData.lastName);
-    data.append('email', formData.email.trim()); // API checks exact match
+    data.append('email', formData.email.trim()); // API checks exact match, this bypasses typing issues
     data.append('password', formData.password);
     /* 
       TODO: 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import NewChatModal from '../../components/HomeChat/NewChatModal';
 import { DropDownProps } from '../../types/chat';
@@ -6,7 +6,6 @@ import { DropDownProps } from '../../types/chat';
 function ConfigDropdown(dropDownProps: DropDownProps) {
   const { getChatsData, userData, isOpen, createNewChat, deleteUser } = dropDownProps;
   
-  const [prevUser] = useState(userData)
   const [delDialogIsOpen, setDelDialogIsOpen] = useState(false);
   const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
   

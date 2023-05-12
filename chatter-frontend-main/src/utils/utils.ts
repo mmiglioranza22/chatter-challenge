@@ -17,11 +17,11 @@ export const validateLogin = (values: LoginData) => {
   return error
 }
 
+// https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
 export const validateRegister = (values: RegisterData) => {
   const error: Record<any, string> = {}
   const { email, password, name, lastName } = values
   const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
-  // https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
   const strongPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
   
   if (!name.length) {
