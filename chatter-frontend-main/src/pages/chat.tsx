@@ -125,15 +125,11 @@ const onDisconnect = () => {
           3. Set the socket off and return void to prevent useless renders - 
       */
 
-     
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     // socket.on("reconnect_attempt", onReconnectAttempt);
     // socket.on("reconnect", onReconnect);
     // socket.on('foo', onFooEvent);
-    
-    socket.on('disconnect', () => {
-    })
 
     return () => {
       socket.off('connect', onConnect);
