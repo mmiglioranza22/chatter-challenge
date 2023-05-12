@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk, isRejected, isFulfilled } from '@reduxjs/toolkit';
 import type { RootState } from './store';
-import { ChatsState, ChatTabProps, UserDataState, APIResponse, FormDataType } from '../types/chat';
+import { ChatsState, ChatTabProps, UserDataState, APIResponse } from '../types/chat';
 import apiClient from '../utils/client';
 import { AxiosRequestConfig } from 'axios';
 import { generateApiErrorResponse } from '../utils/utils';
@@ -75,9 +75,30 @@ export const createChat = createAsyncThunk('user/createChat', async (data: Recor
   }
 });
 
-// post('/chats/:chatId' -> sendMessage
-const isRejectedAction = isRejected(fetchUserChats, deleteChat, createChat)
-const isFulfilledAction = isFulfilled(fetchUserChats, deleteChat, createChat)
+export const sendMessage = createAsyncThunk('user/sendMessage', async (data: Record<string, any>, thunkAPI) => {
+  try {
+    const { 
+      chatId,
+      userData: {
+        authToken, 
+        userId 
+      },
+      message
+    } = data
+    const config: AxiosRequestConfig = {
+      data: { user: userId },
+      headers: { Authorization: `Bearer ${authToken}` }
+    }
+    const response = await apiClient.post(`/chats/${chatId}`, {message}, config)
+    return response.data;
+  } catch (error: any | unknown) {
+    const errorResponse: APIResponse = generateApiErrorResponse(error)
+    return thunkAPI.rejectWithValue(errorResponse) 
+  }
+});
+
+const isRejectedAction = isRejected(fetchUserChats, deleteChat, createChat, sendMessage)
+const isFulfilledAction = isFulfilled(fetchUserChats, deleteChat, createChat, sendMessage)
 
 export const chatsSlice = createSlice({
   name: 'chats',
@@ -107,6 +128,10 @@ export const chatsSlice = createSlice({
     })
     // Create chat
     builder.addCase(createChat.fulfilled, (state, action) => {
+      state.message = action.payload.message;
+    })
+    // Send message
+    builder.addCase(sendMessage.fulfilled, (state, action) => {
       state.message = action.payload.message;
     })
     // Error handler for all actions

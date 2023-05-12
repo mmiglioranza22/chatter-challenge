@@ -16,7 +16,8 @@ import {
   setIsAllowedExpand,
   fetchUserChats,
   deleteChat,
-  createChat 
+  createChat,
+  sendMessage
 } from '../redux/chatsSlice';
 import ChatHeader from '../components/HomeChat/ChatHeader';
 import ConfigDropdown from '../layout/Dropdowns/Config';
@@ -25,7 +26,7 @@ import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
 import { LoadRemove, LoadStart } from '../components/Loading';
 import { deleteUser, setLogoutData, fetchUserData, setLoginData } from '../redux/userSlice'
-import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
+import { NotificationFailure, NotificationSuccess, NotificationWarning } from '../components/Notifications';
 import { useSessionStorage } from '../utils/customHooks';
 import { UserDataState } from '../types/types';
 
@@ -83,31 +84,25 @@ function HomeChat() {
   }, []);
 
 
-// SOCKETS
-const onConnect = () => {
-  // setIsConnected(true);
-  // eslint-disable-next-line no-console
- console.log('Conectado a socket del servidor')
-}
+  // SOCKETS
+  const onConnect = () => {
+    // eslint-disable-next-line no-console
+  console.debug('Conectado a socket del servidor')
+  }
 
-const onDisconnect = () => {
-  // eslint-disable-next-line no-console
-  console.log('Connection with server lost')
-  // setIsConnected(false);
-}
-// const onReconnectAttempt = () => {
-//   // eslint-disable-next-line no-console
-//   console.log('reconnect attempt')
-// }
+  const onDisconnect = () => {
+    // eslint-disable-next-line no-console
+    console.debug('Conexión perdida.')
+    NotificationWarning('Conexión perdida con el servidor. Reconectando...')
+  }
 
-// const onReconnect =  () => {
-//   // eslint-disable-next-line no-console
-//   console.log('reconnect')
-// }
-
-// function onFooEvent(value) {
-//   setFooEvents(previous => [...previous, value]);
-// }
+  async function onChatCreate(value: any) {
+    // Fetches all messages, since user can receive messages in different chats while being in one specific.
+    getChatsData()
+    if (value.action === 'error') {
+      NotificationFailure(value.error || 'An error ocurred while fetching messages.')
+    }
+  }
     
 
   useEffect(() => {
@@ -120,23 +115,19 @@ const onDisconnect = () => {
 
       /*
         TODO: 
-          1. Listen the socket - WIP
-          2. Get chat data ---> ????
-          3. Set the socket off and return void to prevent useless renders - 
+          1. Listen the socket - DONE
+          2. Get chat data ---> DONE
+          3. Set the socket off and return void to prevent useless renders - DONE
       */
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
-    // socket.on("reconnect_attempt", onReconnectAttempt);
-    // socket.on("reconnect", onReconnect);
-    // socket.on('foo', onFooEvent);
+    socket.on('chats', onChatCreate);
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
-      // socket.off("reconnect_attempt", onReconnectAttempt);
-      // socket.off("reconnect", onReconnect);
-      // socket.off('foo', onFooEvent);
+      socket.off('chats', onChatCreate);
     }
 
     }
@@ -151,12 +142,19 @@ const onDisconnect = () => {
       setMsgEntry('');
       /*
         TODO:
-        1. Send message -> post('/chats/:chatId')
+        1. Send message -> DONE
       */
+     const messageData = { 
+      chatId: selectedChat, 
+      userData, 
+      message: msgEntry 
+    }
+     dispatch(sendMessage(messageData))
     } else {
       /* TODO: 
-        1. Show error notification -> en la action ?
+        1. Show error notification -> DONE
       */
+      NotificationWarning('Por favor escriba un mensaje.')
     }
   };
 
