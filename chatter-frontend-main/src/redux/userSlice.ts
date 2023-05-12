@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk, isRejected, isFulfilled } from '@reduxjs/toolkit';
+import { AxiosRequestConfig } from 'axios';
 import type { RootState } from './store';
 import { UserDataState, APIResponse, FormDataType } from '../types/chat';
 import apiClient from '../utils/client';
-import { AxiosRequestConfig } from 'axios';
 import { generateApiErrorResponse } from '../utils/utils';
 
 const initialState: UserDataState = {

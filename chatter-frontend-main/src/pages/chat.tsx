@@ -4,13 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { IoMdSettings } from 'react-icons/io';
 import { HiPhoneMissedCall } from 'react-icons/hi';
-import { socket } from '../sockets'; 
 
-import empty from '../assets/images/empty.png';
-import MyProfile from '../components/MyProfile';
+import { socket } from '../sockets'; 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getUser } from '../redux/userSlice';
-import { Chat, LogoType, FormDataType } from '../types/chat';
 import { 
   getChats,
   setIsAllowedExpand,
@@ -19,15 +15,25 @@ import {
   createChat,
   sendMessage
 } from '../redux/chatsSlice';
+import {
+  getUser,
+  deleteUser,
+  setLogoutData,
+  fetchUserData,
+  setLoginData
+} from '../redux/userSlice'
+
+import empty from '../assets/images/empty.png';
+import MyProfile from '../components/MyProfile';
 import ChatHeader from '../components/HomeChat/ChatHeader';
 import ConfigDropdown from '../layout/Dropdowns/Config';
 import SearchBar from '../components/SearchBar';
 import ChatTab from '../components/HomeChat/ChatTab';
 import ChatMessages from '../components/HomeChat/ChatMessages';
 import { LoadRemove, LoadStart } from '../components/Loading';
-import { deleteUser, setLogoutData, fetchUserData, setLoginData } from '../redux/userSlice'
 import { NotificationFailure, NotificationSuccess, NotificationWarning } from '../components/Notifications';
 import { useSessionStorage } from '../utils/customHooks';
+import { Chat, LogoType, FormDataType } from '../types/chat';
 import { UserDataState } from '../types/types';
 
 

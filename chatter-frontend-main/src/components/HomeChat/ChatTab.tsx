@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
-
 import { IoCheckmarkDoneOutline } from 'react-icons/io5';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { ChatTabProps, TicketData, TicketStatus } from '../../types/chat';
+
+import { ChatTabProps, TicketStatus } from '../../types/chat';
 import ConfirmDialog from '../ConfirmDialog';
 import ContextMenu from '../ContextMenu';
 import ChatTabContextMenu from './ChatTabContextMenu';

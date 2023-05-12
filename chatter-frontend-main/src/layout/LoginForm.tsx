@@ -2,15 +2,18 @@ import Field from '../components/Home/Field';
 import React, { useState, useEffect } from 'react';
 import FormData from 'form-data';
 import Link from 'next/link';
-import { LoginData } from '../types/login';
-import { UserDataState } from '../types/types'
+import { useRouter } from 'next/dist/client/router';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loginUser, fetchUserData  } from '../redux/userSlice';
-import { validateLogin } from '../utils/utils';
-import { useSessionStorage } from '../utils/customHooks';
-import { useRouter } from 'next/dist/client/router';
+
 import { LoadStart, LoadRemove } from '../components/Loading';
 import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
+
+import { LoginData } from '../types/login';
+import { UserDataState } from '../types/types'
+import { validateLogin } from '../utils/utils';
+import { useSessionStorage } from '../utils/customHooks';
 
 
 function LoginForm() {

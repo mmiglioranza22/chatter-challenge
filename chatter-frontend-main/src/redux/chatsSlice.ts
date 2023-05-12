@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk, isRejected, isFulfilled } from '@reduxjs/toolkit';
+import { AxiosRequestConfig } from 'axios';
 import type { RootState } from './store';
 import { ChatsState, ChatTabProps, UserDataState, APIResponse } from '../types/chat';
 import apiClient from '../utils/client';
-import { AxiosRequestConfig } from 'axios';
 import { generateApiErrorResponse } from '../utils/utils';
 
 const initialState: ChatsState = {
@@ -69,8 +69,6 @@ export const createChat = createAsyncThunk('user/createChat', async (data: Recor
     return response.data;
   } catch (error: any | unknown) {
     const errorResponse: APIResponse = generateApiErrorResponse(error)
-    // eslint-disable-next-line no-console
-    console.log(error)
     return thunkAPI.rejectWithValue(errorResponse) 
   }
 });

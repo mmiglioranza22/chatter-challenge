@@ -1,14 +1,16 @@
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import FormData from 'form-data';
-import { RegisterData } from '../types/register';
-import Field from '../components/Home/Field';
+import { useRouter } from 'next/dist/client/router';
+
 import { useAppDispatch } from '../redux/hooks';
 import { createUser } from '../redux/userSlice'
-import { useRouter } from 'next/dist/client/router';
-import { validateRegister } from '../utils/utils';
+
+import Field from '../components/Home/Field';
 import { NotificationFailure, NotificationSuccess } from '../components/Notifications';
 import { LoadRemove, LoadStart } from '../components/Loading';
+import { RegisterData } from '../types/register';
+import { validateRegister } from '../utils/utils';
 
 function Register() {
   const initialValues: RegisterData = {

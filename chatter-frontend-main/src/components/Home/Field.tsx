@@ -1,5 +1,5 @@
-import { FieldProps } from '../../types/chat';
 import styled from 'styled-components';
+import { FieldProps } from '../../types/chat';
 
 const ErrorSpan = styled.span`
 display: block;

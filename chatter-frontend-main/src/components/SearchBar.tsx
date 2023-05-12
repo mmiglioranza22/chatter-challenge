@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import { BiSearchAlt } from 'react-icons/bi';
 import { SearchBarProps } from '../types/chat';
-import React, { useState } from 'react';
 
 function SearchBar(searchBarProps: SearchBarProps) {
   const { chatId } = searchBarProps;

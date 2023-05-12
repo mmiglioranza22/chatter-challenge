@@ -3,11 +3,11 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-
+import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import '../App.css';
 import '../index.css';
-import 'react-toastify/dist/ReactToastify.css';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import { store } from '../redux/store';

@@ -1,6 +1,6 @@
 import { Modal } from 'react-bootstrap';
-import { TicketData, TicketStatus } from '../../types/chat';
 import styled from 'styled-components';
+import { TicketData, TicketStatus } from '../../types/chat';
 import TicketSvg from './TicketSvg';
 
 const LeftSide = styled.div`

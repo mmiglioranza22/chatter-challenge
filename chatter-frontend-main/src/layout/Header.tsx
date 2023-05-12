@@ -1,10 +1,11 @@
 import Link from 'next/link';
-
-import logo from '../assets/images/logo_chatter_color_2.png';
 import { Container, Nav, Navbar } from 'react-bootstrap';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUser, setLogoutData } from '../redux/userSlice';
 import { clearChats } from '../redux/chatsSlice';
+
+import logo from '../assets/images/logo_chatter_color_2.png';
 import { LogoType } from '../types/chat';
 import { LoadStart } from '../components/Loading';
 
