@@ -99,7 +99,6 @@ function HomeChat() {
   const onDisconnect = () => {
     // eslint-disable-next-line no-console
     console.debug('Conexión perdida.')
-    NotificationWarning('Conexión perdida con el servidor. Reconectando...')
   }
 
   async function onChatCreate(value: any) {
