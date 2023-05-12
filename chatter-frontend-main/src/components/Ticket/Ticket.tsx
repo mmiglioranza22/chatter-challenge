@@ -3,15 +3,13 @@ import { TicketData, TicketStatus } from '../../types/chat';
 import styled from 'styled-components';
 import TicketSvg from './TicketSvg';
 
-
-
 const LeftSide = styled.div`
   min-width: 335px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-around;
-  padding: 16px;
+  padding: 14px 0px 14px 24px;
   flex-grow: 1;
 ` 
 
@@ -21,12 +19,12 @@ const RightSide = styled.div`
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-around;
-  padding: 16px;
+  padding: 14px 24px 14px 0px;
   flex-grow: 1;
 `
 
 const Description = styled.div`
-  max-width: 256px;
+  max-width: 250px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -34,6 +32,7 @@ const Description = styled.div`
 
 const Title = styled.div`
   font-weight: 700;
+  font-size: 18px;
 `
 
 const Tag = styled.div`
@@ -42,13 +41,16 @@ const Tag = styled.div`
   border-top-color: transparent;
   border-right-color: transparent;
   padding: 0px 12px;
-  margin-left: 16px;
+  margin-left: 14px;
 `
 const SubContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+`
+const Date = styled.div`
+  font-size: 18px;
 `
 
 function Ticket(ticketProps: TicketData) {
@@ -90,7 +92,6 @@ const Brand = styled.div`
 
   return (
     <Modal className="text-chatter-black" show={isOpen} centered onHide={handleClickOutside}>
-      <Modal.Header className="justify-content-center" closeButton />
       <Modal.Body className="justify-content-center text-center">
         <Container>
           <LeftSide>
@@ -102,8 +103,8 @@ const Brand = styled.div`
           </LeftSide>
             <TicketSvg />
           <RightSide>
-            <div>{date?.toLocaleDateString()}</div>
-            <Brand>{priority === 0 ? 'ALTA' : 'BAJA'}</Brand>
+            <Date>{date?.toLocaleDateString()}</Date>
+            <Brand>{priority}</Brand>
             <div>#{id}</div>
           </RightSide>
         </Container>

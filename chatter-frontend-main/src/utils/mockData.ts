@@ -1,7 +1,7 @@
 import { TicketPriority, TicketStatus, TicketData } from '../types/chat';
 
 /**
- * TODO
+ * TODO -> DONE
  *
  * Use this ticket mock data to display both tickets (one closed and one opened) in the context menu of each chat
  */

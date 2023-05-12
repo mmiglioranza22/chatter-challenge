@@ -102,9 +102,9 @@ export enum TicketStatus {
 }
 
 export enum TicketPriority {
-  HIGH,
-  MEDIUM,
-  LOW
+  HIGH = 'ALTA',
+  MEDIUM = 'MEDIA',
+  LOW = 'BAJA'
 }
 
 export interface TicketData {
