@@ -35,6 +35,7 @@ function LoginForm() {
   };
 
   useEffect(() => {
+    LoadRemove()
     // token is cleaned upon mounting. Redirects to '/' or refresh there will clear the session token.
     setTokenSession('')
     setUserSession('')
