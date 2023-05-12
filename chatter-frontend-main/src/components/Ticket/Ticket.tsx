@@ -52,22 +52,6 @@ const SubContainer = styled.div`
 const Date = styled.div`
   font-size: 18px;
 `
-const Container = styled.div<{ status: TicketStatus }>`
-  position: relative;
-  background: ${({status}) => status === TicketStatus.CLOSED ? '#01db77' : '#ff3633'};
-  display: flex;
-  color: #FFF;
-  min-width: 335px;
-  min-height: 130px;
-`
-
-const Brand = styled.div`
-  background: #FFF;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  color: ${({status}) => status === TicketStatus.OPEN ? '#63656A' : '#01db77'};
-  padding: 0px 5px;
-`
 
 function Ticket(ticketProps: TicketData) {
   const {
@@ -88,10 +72,24 @@ const handleClickOutside = () => {
     handleClose()
   }
 }
-// eslint-disable-next-line no-console
-console.log({status})
 
+// Declared here since props where being sent stale for status and did not found a workaround :/
+const Container = styled.div`
+  position: relative;
+  background: ${status === TicketStatus.CLOSED ? '#01db77' : '#ff3633'};
+  display: flex;
+  color: #FFF;
+  min-width: 335px;
+  min-height: 130px;
+`
 
+const Brand = styled.div`
+  background: #FFF;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: ${status === TicketStatus.OPEN ? '#63656A' : '#01db77'};
+  padding: 0px 5px;
+`
 
   return (
     <Modal className="text-chatter-black" show={isOpen} centered onHide={handleClickOutside}>
