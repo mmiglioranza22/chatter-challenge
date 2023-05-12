@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { IoMdSettings } from 'react-icons/io';
 import { HiPhoneMissedCall } from 'react-icons/hi';
-import socket from '../sockets'; 
+import { socket } from '../sockets'; 
 
 import empty from '../assets/images/empty.png';
 import MyProfile from '../components/MyProfile';
@@ -63,6 +63,8 @@ function HomeChat() {
       1. Get user data -> DONE by selector and on mount 
       2. Get chats data -> DONE
     */
+    socket.connect();
+
     if (tokenSession && userSession) {
       const data: UserDataState = {
         userId: userSession,
@@ -75,8 +77,38 @@ function HomeChat() {
       router.push('/')
       NotificationFailure('Not authorized. Please log in.')
     }
+    return () => {
+      socket.disconnect();
+    }
   }, []);
 
+
+// SOCKETS
+const onConnect = () => {
+  // setIsConnected(true);
+  // eslint-disable-next-line no-console
+ console.log('Conectado a socket del servidor')
+}
+
+const onDisconnect = () => {
+  // eslint-disable-next-line no-console
+  console.log('Connection with server lost')
+  // setIsConnected(false);
+}
+// const onReconnectAttempt = () => {
+//   // eslint-disable-next-line no-console
+//   console.log('reconnect attempt')
+// }
+
+// const onReconnect =  () => {
+//   // eslint-disable-next-line no-console
+//   console.log('reconnect')
+// }
+
+// function onFooEvent(value) {
+//   setFooEvents(previous => [...previous, value]);
+// }
+    
 
   useEffect(() => {
     if (ref.current) {
@@ -88,10 +120,28 @@ function HomeChat() {
 
       /*
         TODO: 
-          1. Listen the socket -
+          1. Listen the socket - WIP
           2. Get chat data ---> ????
           3. Set the socket off and return void to prevent useless renders - 
       */
+
+     
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    // socket.on("reconnect_attempt", onReconnectAttempt);
+    // socket.on("reconnect", onReconnect);
+    // socket.on('foo', onFooEvent);
+    
+    socket.on('disconnect', () => {
+    })
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+      // socket.off("reconnect_attempt", onReconnectAttempt);
+      // socket.off("reconnect", onReconnect);
+      // socket.off('foo', onFooEvent);
+    }
 
     }
   }, [chats]);
@@ -121,6 +171,7 @@ function HomeChat() {
   const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') handleSendMsg();
   };
+
 
   const handleOpenConfig = (e: React.MouseEvent<HTMLDivElement>) => {
     setConfigOpen(!configOpen);
